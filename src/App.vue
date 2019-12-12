@@ -8,7 +8,7 @@
       <router-view :style="{minHeight:cMinH}"/>
     </div>
     <section class="footer">
-
+      aaaa
     </section>
   </section>
 </template>
