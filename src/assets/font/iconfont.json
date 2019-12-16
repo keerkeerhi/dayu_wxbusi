@@ -1,0 +1,16 @@
+{
+  "id": "1563648",
+  "name": "wx_business",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon",
+  "description": "微信商户平台",
+  "glyphs": [
+    {
+      "icon_id": "3050508",
+      "name": "定位",
+      "font_class": "location",
+      "unicode": "e611",
+      "unicode_decimal": 58897
+    }
+  ]
+}

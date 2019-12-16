@@ -2,6 +2,17 @@
 @import "assets/font/iconfont.css";
 @import "assets/css/sass-base";
 
+.normal-btn{
+  outline: none;
+  font-size: 36px;
+  background: #2d61fe;
+  color: #fff;
+  border: none;
+}
+.normal-btn:active{
+  background: #013EF7;
+}
+
 #app {
   font-family: 微软雅黑;
   -webkit-font-smoothing: antialiased;

@@ -1,40 +1,22 @@
 <template>
-  <section class="rootDiv">
-    <section id="header" class="addShadow">
-      <router-link tag="img" to="/Login" class="logo" :src="logo" />
-      <router-link tag="img" to="/Home" class="logo" :src="logo" />
-    </section>
-    <div id="app">
-      <router-view :style="{minHeight:cMinH}"/>
-    </div>
-    <section class="footer">
-      aaaa
-    </section>
-  </section>
+  <router-view/>
 </template>
 
 <script>
   import './App.scss'
-  import logo from './assets/logo.png'
-
   export default {
     name: 'App',
     data() {
       return {
-        logo,
-        cMinH: 'auto'
-      }
-    },
-    methods: {
-      clickNav(url) {
-        this.$router.push(url)
       }
     },
     created() {
-      this.cMinH = document.documentElement.clientHeight - 198 + 'px'
-      // window.onresize = ()=>{
-      //   this.cMinH = document.documentElement.clientHeight - 198 + 'px'
-      // }
+      return;
+      let isFirst = localStorage.getItem("isFirst");
+      if (isFirst)
+        this.$router.push("/Home")
+      else
+        this.$router.push("/Begin")
     }
   }
 </script>
