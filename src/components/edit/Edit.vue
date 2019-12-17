@@ -1,8 +1,16 @@
 <template>
     <section class="editPage" >
       <van-cell-group class="item-div" >
-        <van-field v-model="product.name" placeholder="请输入店铺名称" />
+        <van-field v-model="product.name" required placeholder="请输入店铺名称" />
       </van-cell-group>
+      <van-field
+        v-model="product.price"
+        required
+        clearable
+        placeholder="请输入价格"
+      >
+        <label slot="right-icon" >元</label>
+      </van-field>
     </section>
 </template>
 
