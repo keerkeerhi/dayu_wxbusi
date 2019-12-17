@@ -12,7 +12,7 @@ import store from './store'
 Vue.config.productionTip = false
 Vue.use(ElementUI)
 
-import { Field,CellGroup,Toast,Popup,Picker,Uploader,Tabbar,TabbarItem } from 'vant';
+import { Field,CellGroup,Toast,Popup,Picker,Uploader,Tabbar,TabbarItem,Collapse,CollapseItem } from 'vant';
 Vue.use(Field);
 Vue.use(CellGroup);
 Vue.use(Toast);
@@ -21,6 +21,8 @@ Vue.use(Picker);
 Vue.use(Uploader);
 Vue.use(Tabbar);
 Vue.use(TabbarItem);
+Vue.use(Collapse);
+Vue.use(CollapseItem);
 // import {
 //   Actionsheet,
 //   AddressEdit,

@@ -12,6 +12,8 @@ const Register = r => require.ensure([], () => r(require('../components/register
 const Customer = r => require.ensure([], () => r(require('../components/customer/Customer')), 'Customer')
 // 产品
 const Product = r => require.ensure([], () => r(require('../components/product/Product')), 'Product')
+// 编辑产品
+const Edit = r => require.ensure([], () => r(require('../components/edit/Edit')), 'Edit')
 
 export default new Router({
   routes: [
@@ -39,6 +41,11 @@ export default new Router({
       path: '/product',
       name: 'Product',
       component: Product
+    },
+    {
+      path: '/edit',
+      name: 'Edit',
+      component: Edit
     }
   ]
 })
