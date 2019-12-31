@@ -153,15 +153,15 @@
             marketService.shop_msg(params).then(res=>{
               if (res.code==0)
               {
-                this.$route.push('/shopstatus');
+                _this.$router.push('/shopstatus');
               }
               else
               {
-                this.$toast.fail('服务器宕机了，555~');
+                _this.$toast.fail('服务器宕机了，555~');
               }
             })
           },rej=>{
-            this.$toast.fail("上传图片超时")
+            _this.$toast.fail("上传图片超时")
           })
         }
       }
