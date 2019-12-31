@@ -14,6 +14,8 @@ const Customer = r => require.ensure([], () => r(require('../components/customer
 const Product = r => require.ensure([], () => r(require('../components/product/Product')), 'Product')
 // 编辑产品
 const Edit = r => require.ensure([], () => r(require('../components/edit/Edit')), 'Edit')
+// 审核状态
+const ShopStatus = r => require.ensure([], () => r(require('../components/shopstatus/ShopStatus')), 'ShopStatus')
 
 export default new Router({
   routes: [
@@ -46,6 +48,11 @@ export default new Router({
       path: '/edit',
       name: 'Edit',
       component: Edit
+    },
+    {
+      path: '/shopstatus',
+      name: 'ShopStatus',
+      component: ShopStatus
     }
   ]
 })
