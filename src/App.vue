@@ -61,7 +61,9 @@
               signature: data.signature,// 必填，签名
               jsApiList: ["updateAppMessageShareData","getLocation","updateTimelineShareData","openLocation"] // 必填，需要使用的JS接口列表
             })
+            console.log('11111111')
             this.$wx.ready(function () {
+              console.log('2222222222')
               this.$wx.updateAppMessageShareData({
                 title: '再见，再见', // 分享标题
                 desc: 'aaaaaa', // 分享描述
@@ -70,8 +72,10 @@
                 success: function () {
                   // 设置成功
                   this.$toast("分享给朋友设置成功")
+                  console.log('33333333333')
                 },
                 fail(){
+                  console.log('44444444444444444')
                   this.$toast("分享朋友设置失败")
                 }
               })
@@ -82,9 +86,11 @@
                 success: function () {
                   // 设置成功
                   this.$toast("分享给朋友圈设置成功")
+                  console.log('555555555555555555555555555')
                 },
                 fail(){
                   this.$toast("分享给朋友圈设置失败")
+                  console.log('6666666666666666666666666666')
                 }
               })
             })
