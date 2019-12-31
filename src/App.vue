@@ -59,7 +59,7 @@
               timestamp: data.timestamp, // 必填，生成签名的时间戳
               nonceStr: data.nonceStr, // 必填，生成签名的随机串
               signature: data.signature,// 必填，签名
-              jsApiList: ["updateAppMessageShareData","getLocation","updateTimelineShareData"] // 必填，需要使用的JS接口列表
+              jsApiList: ["updateAppMessageShareData","getLocation","updateTimelineShareData","openLocation"] // 必填，需要使用的JS接口列表
             })
             this.$wx.ready(function () {
               this.$wx.updateAppMessageShareData({
@@ -69,6 +69,10 @@
                 imgUrl: 'https://www.dayu1.net/static/img/biglogo.ee0dc6b.png', // 分享图标
                 success: function () {
                   // 设置成功
+                  this.$toast("分享给朋友设置成功")
+                },
+                fail(){
+                  this.$toast("分享朋友设置失败")
                 }
               })
               this.$wx.updateTimelineShareData({
@@ -77,6 +81,10 @@
                 imgUrl: 'https://www.dayu1.net/static/img/biglogo.ee0dc6b.png', // 分享图标
                 success: function () {
                   // 设置成功
+                  this.$toast("分享给朋友圈设置成功")
+                },
+                fail(){
+                  this.$toast("分享给朋友圈设置失败")
                 }
               })
             })
