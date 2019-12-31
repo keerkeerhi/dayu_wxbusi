@@ -61,7 +61,7 @@
               signature: data.signature,// 必填，签名
               jsApiList: ["updateAppMessageShareData","getLocation","updateTimelineShareData"] // 必填，需要使用的JS接口列表
             })
-            wx.ready(function () {
+            this.$wx.ready(function () {
               this.$wx.updateAppMessageShareData({
                 title: '再见，再见', // 分享标题
                 desc: 'aaaaaa', // 分享描述
