@@ -1,10 +1,10 @@
 <template>
     <section class="registPage" >
       <van-cell-group class="item-div" >
-        <van-field v-model="data.name" placeholder="请输入店铺名称" />
+        <van-field v-model="data.ShopName" placeholder="请输入店铺名称" />
       </van-cell-group>
       <van-cell-group class="item-div" >
-        <van-field v-model="data.location" @click-right-icon="getLoc" placeholder="请输入店铺位置" >
+        <van-field v-model="data.ShopLocation" @click-right-icon="getLoc" placeholder="请输入店铺位置" >
           <i class="iconfont iconlocation" slot="right-icon" ></i>
         </van-field>
       </van-cell-group>
@@ -12,7 +12,7 @@
         <van-field
           readonly
           clickable
-          :value="data.type"
+          :value="data.ShopIndustry"
           placeholder="选择行业"
           @click="showPicker = true"
         />
@@ -35,12 +35,13 @@
         <van-uploader v-model="fileList" :max-count="1" :after-read="afterRead" />
       </van-cell-group>
       <div class="bottom-btn" >
-        <button class="normal-btn" @click="toHome" >提交审核</button>
+        <button class="normal-btn" @click="saveInfo" >提交审核</button>
       </div>
     </section>
 </template>
 
 <script>
+  import marketService from '../../service/bolosev'
     export default {
         name: "Register",
       data(){
@@ -48,18 +49,16 @@
             showPicker: false,
             columns: ['百货', '美食', '服饰', '汽车'],
             data: {
-              name: '',
-              location: '',
-              type: ''
+              ShopName: '',
+              ShopLocation: '',
+              ShopCoordinates: '',
+              ShopIndustry: '',
+              BusinessLicense: '',
+              Positive: '',
+              Negative: ''
             },
             fileList: [
-              // { url: 'https://img.yzcdn.cn/vant/leaf.jpg' },
-              // // Uploader 根据文件后缀来判断是否为图片文件
-              // // 如果图片 URL 中不包含类型信息，可以添加 isImage 标记来声明
-              // { url: 'https://cloud-image', isImage: true },
-              // { url: 'https://img.yzcdn.cn/vant/leaf.jpg' },
-              // { url: 'https://img.yzcdn.cn/vant/leaf.jpg' },
-              // { url: 'https://img.yzcdn.cn/vant/leaf.jpg' },
+
             ]
           }
       },
@@ -67,19 +66,36 @@
         document.title = "入驻申请"
       },
       methods: {
-        toHome(){
-          this.$router.push("/home")
-        },
         afterRead(file){
           // 此时可以自行将文件上传至服务器
           console.log(file);
         },
         getLoc(){
-          Toast('获取位置');
+          this.$wx.getLocation({
+            type: 'wgs84', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
+            success: function (res) {
+              var latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
+              var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
+              var speed = res.speed; // 速度，以米/每秒计
+              var accuracy = res.accuracy; // 位置精度
+            }
+          });
         },
         onConfirm(value) {
           this.data.type = value;
           this.showPicker = false;
+        },
+        saveInfo(){
+          marketService.shop_msg(this.data).then(res=>{
+            if (res.code==0)
+            {
+              this.$route.push('/shopstatus');
+            }
+            else
+            {
+              this.$toast.fail('服务器宕机了，555~');
+            }
+          })
         }
       }
     }

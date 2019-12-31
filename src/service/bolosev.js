@@ -20,10 +20,30 @@ axios.interceptors.response.use(function (response) {
 // 查询市场列表 用来查询市场中的菠萝列表，包括类型、筛选、排序、分页等，目前仅支持类型中的所有，其余暂不支持。
 const shop_status = baseURL + 'shop-status/'
 
+// 入驻商铺
+const shop_msg = baseURL + 'shop-msg/'
+
+// 获取微信api信息
+const get_wxcfg = baseURL + 'get-wxcfg/'
+
 export default {
+  get_wxcfg(params) {
+    return new Promise((resolve, reject) => {
+      axios.get(get_wxcfg + getParams(params)).then(res => {
+        resolve(res.data)
+      })
+    })
+  },
   shopStatus(params) {
     return new Promise((resolve, reject) => {
       axios.get(shop_status + getParams(params)).then(res => {
+        resolve(res.data)
+      })
+    })
+  },
+  shop_msg(params) {
+    return new Promise((resolve, reject) => {
+      axios.get(shop_msg, params).then(res => {
         resolve(res.data)
       })
     })
