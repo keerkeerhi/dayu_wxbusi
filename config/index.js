@@ -12,7 +12,7 @@ module.exports = {
     proxyTable: {
       '/api': {
         // 测试环境
-        target: 'http://192.168.6.21:8588',  // 接口域名
+        target: 'https://shop.dayu1.net',  // 接口域名
         changeOrigin: true,  //是否跨域
         pathRewrite: {
           '^/api': '/api'   //需要rewrite重写的,
@@ -58,7 +58,7 @@ module.exports = {
 
     // Paths
     assetsRoot: path.resolve(__dirname, '../dist'),
-    assetsSubDirectory: 'static',
+    assetsSubDirectory: 'static_front',
     assetsPublicPath: '',
 
     /**
