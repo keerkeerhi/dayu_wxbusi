@@ -13,6 +13,7 @@
       }
     },
     created() {
+      alert(1)
       marketService.shopStatus().then(res=>{
         console.log('======res',res)
       })

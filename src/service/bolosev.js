@@ -10,7 +10,7 @@ axios.interceptors.response.use(function (response) {
     switch (error.response.status) {
       // 返回401，清除token信息并跳转到登录页面
       case 302:
-        location.href=baseURL+'normal_user_info/';break;
+        location.href='https://shop.dayu1.net/api/normal_user_info/';break;
     }
   }
   // 对响应错误做点什么
