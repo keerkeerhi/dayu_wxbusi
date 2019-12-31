@@ -139,7 +139,7 @@
               res.forEach(it=>{
                 params[it.key] = it.path
               })
-              params.industry = _this.industryObj[params.industry];
+              params.ShopIndustry = _this.industryObj[params.ShopIndustry];
               resolve(params)
             },rej=>{
               reject(1)
