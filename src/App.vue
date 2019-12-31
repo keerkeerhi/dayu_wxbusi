@@ -59,12 +59,12 @@
               timestamp: data.timestamp, // 必填，生成签名的时间戳
               nonceStr: data.nonceStr, // 必填，生成签名的随机串
               signature: data.signature,// 必填，签名
-              jsApiList: ["updateAppMessageShareData","getLocation","updateTimelineShareData","openLocation"] // 必填，需要使用的JS接口列表
+              jsApiList: ["onMenuShareAppMessage","getLocation","onMenuShareTimeline","openLocation"] // 必填，需要使用的JS接口列表
             })
             console.log('11111111')
             this.$wx.ready(function () {
               console.log('2222222222')
-              this.$wx.updateAppMessageShareData({
+              this.$wx.onMenuShareAppMessage({
                 title: '再见，再见', // 分享标题
                 desc: 'aaaaaa', // 分享描述
                 link: 'https://shop.dayu1.net/api/normal_user_info/', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
@@ -79,7 +79,7 @@
                   this.$toast("分享朋友设置失败")
                 }
               })
-              this.$wx.updateTimelineShareData({
+              this.$wx.onMenuShareTimeline({
                 title: '再见aaa，再见', // 分享标题
                 link: 'https://shop.dayu1.net/api/normal_user_info/', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
                 imgUrl: 'https://www.dayu1.net/static/img/biglogo.ee0dc6b.png', // 分享图标
