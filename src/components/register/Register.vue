@@ -139,7 +139,6 @@
               res.forEach(it=>{
                 params[it.key] = it.path
               })
-              params.ShopIndustry = _this.industryObj[params.ShopIndustry];
               resolve(params)
             },rej=>{
               reject(1)
@@ -147,7 +146,10 @@
           })
         },
         saveInfo(){
+          let _this = this;
           this.upload_all().then(params=>{
+            params.ShopIndustry = _this.industryObj[params.ShopIndustry];
+            console.log('----->shopIn',params.ShopIndustry)
             marketService.shop_msg(params).then(res=>{
               if (res.code==0)
               {
