@@ -26,10 +26,19 @@ const shop_msg = baseURL + 'shop-msg/'
 // 获取微信api信息
 const get_wxcfg = baseURL + 'get-wxcfg/'
 
+// 上传图片
+const uploads = baseURL + 'uploads/'
 export default {
   get_wxcfg(params) {
     return new Promise((resolve, reject) => {
       axios.get(get_wxcfg + getParams(params)).then(res => {
+        resolve(res.data)
+      })
+    })
+  },
+  uploads(params){
+    return new Promise((resolve, reject) => {
+      axios.post(uploads,params).then(res => {
         resolve(res.data)
       })
     })
@@ -43,7 +52,7 @@ export default {
   },
   shop_msg(params) {
     return new Promise((resolve, reject) => {
-      axios.get(shop_msg, params).then(res => {
+      axios.post(shop_msg, params).then(res => {
         resolve(res.data)
       })
     })

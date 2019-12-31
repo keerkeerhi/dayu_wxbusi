@@ -27,12 +27,15 @@
       </van-cell-group>
       <van-cell-group class="item-div phoneDiv1" >
         <span>营业执照</span>
-        <van-uploader v-model="fileList" :max-count="1" :after-read="afterRead" />
+        <van-uploader v-model="fileList" :max-count="1" :after-read="read_file" />
       </van-cell-group>
       <van-cell-group class="item-div phoneDiv1" >
         <span>身份证正反面</span>
-        <van-uploader v-model="fileList" :max-count="1" :after-read="afterRead" />
-        <van-uploader v-model="fileList" :max-count="1" :after-read="afterRead" />
+        <van-uploader v-model="positive" :max-count="1" :after-read="read_posi" />
+        <van-uploader v-model="reverse_img" :max-count="1" :after-read="read_rev" />
+      </van-cell-group>
+      <van-cell-group class="item-div" >
+        <van-field v-model="data.phone" placeholder="请输入联系电话" />
       </van-cell-group>
       <div class="bottom-btn" >
         <button class="normal-btn" @click="saveInfo" >提交审核</button>
@@ -55,52 +58,106 @@
               ShopIndustry: '',
               BusinessLicense: '',
               Positive: '',
-              Negative: ''
+              Negative: '',
+              phone: ''
             },
-            fileList: [
-
-            ]
+            fileList: [],
+            positive: [],
+            reverse_img: []
           }
       },
       created(){
         document.title = "入驻申请"
       },
       methods: {
-        afterRead(file){
+        read_file(file){
           // 此时可以自行将文件上传至服务器
           console.log(file);
         },
+        read_posi(file) {
+          console.log(file);
+        },
+        read_rev(file) {
+          console.log(file);
+        },
         getLoc(){
+          let _this = this;
           this.$wx.getLocation({
             type: 'wgs84', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
             success: function (res) {
               var latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
               var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
-              this.$wx.openLocation({
-                latitude: latitude, // 纬度，浮点数，范围为90 ~ -90
-                longitude: longitude, // 经度，浮点数，范围为180 ~ -180。
-                name: '', // 位置名
-                address: '', // 地址详情说明
-                scale: 1, // 地图缩放级别,整形值,范围从1~28。默认为最大
-                infoUrl: '' // 在查看位置界面底部显示的超链接,可点击跳转
-              });
+              _this.data.ShopLocation = latitude + ',' + longitude;
+              _this.data.ShopCoordinates = latitude + ',' + longitude;
+              // this.$wx.openLocation({
+              //   latitude: latitude, // 纬度，浮点数，范围为90 ~ -90
+              //   longitude: longitude, // 经度，浮点数，范围为180 ~ -180。
+              //   name: '', // 位置名
+              //   address: '', // 地址详情说明
+              //   scale: 1, // 地图缩放级别,整形值,范围从1~28。默认为最大
+              //   infoUrl: '' // 在查看位置界面底部显示的超链接,可点击跳转
+              // });
             }
           });
         },
         onConfirm(value) {
-          this.data.type = value;
+          this.data.ShopIndustry = value;
           this.showPicker = false;
         },
+        update_one(key,file){
+          return new Promise((ress,rejj)=>{
+            let fm = new FormData();
+            fm.append("filepath",file.file,file.file.name)
+            marketService.uploads(fm).then(res=>{
+              if (res.code==0)
+              {
+                ress({key,path:res.data.path})
+              }
+              else
+              {
+                rejj(1)
+              }
+            })
+          })
+        },
+        upload_all(){
+          let _this = this;
+          return new Promise((resolve,reject)=>{
+            let ps = [];
+            _this.fileList.forEach(it=>{
+              ps.push(_this.update_one('BusinessLicense',it))
+            })
+            _this.positive.forEach(it=>{
+              ps.push(_this.update_one('Positive',it))
+            })
+            _this.reverse_img.forEach(it=>{
+              ps.push(_this.update_one('Negative',it))
+            })
+            Promise.all(ps).then(res=>{
+              let params = Object.assign({},_this.data)
+              res.forEach(it=>{
+                params[it.key] = it.path
+              })
+              resolve(params)
+            },rej=>{
+              reject(1)
+            })
+          })
+        },
         saveInfo(){
-          marketService.shop_msg(this.data).then(res=>{
-            if (res.code==0)
-            {
-              this.$route.push('/shopstatus');
-            }
-            else
-            {
-              this.$toast.fail('服务器宕机了，555~');
-            }
+          this.upload_all().then(params=>{
+            marketService.shop_msg(params).then(res=>{
+              if (res.code==0)
+              {
+                this.$route.push('/shopstatus');
+              }
+              else
+              {
+                this.$toast.fail('服务器宕机了，555~');
+              }
+            })
+          },rej=>{
+            this.$toast.fail("上传图片超时")
           })
         }
       }

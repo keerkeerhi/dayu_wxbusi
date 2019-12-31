@@ -64,6 +64,14 @@
             console.log('11111111')
             this.$wx.ready(function () {
               console.log('2222222222')
+              wx.checkJsApi({
+                jsApiList: ["onMenuShareAppMessage","getLocation","onMenuShareTimeline","openLocation"], // 需要检测的JS接口列表，所有JS接口列表见附录2,
+                success: function(res) {
+                  // 以键值对的形式返回，可用的api值true，不可用为false
+                  // 如：{"checkResult":{"chooseImage":true},"errMsg":"checkJsApi:ok"}
+                  console.log('----check',res)
+                }
+              });
               this.$wx.onMenuShareAppMessage({
                 title: '再见，再见', // 分享标题
                 desc: 'aaaaaa', // 分享描述
