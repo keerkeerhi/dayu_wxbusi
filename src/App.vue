@@ -57,12 +57,12 @@
               debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
               appId: data.AppId, // 必填，公众号的唯一标识
               timestamp: data.timestamp, // 必填，生成签名的时间戳
-              nonceStr: data.nonce_str, // 必填，生成签名的随机串
+              nonceStr: data.nonceStr, // 必填，生成签名的随机串
               signature: data.signature,// 必填，签名
               jsApiList: ["updateAppMessageShareData","getLocation","updateTimelineShareData"] // 必填，需要使用的JS接口列表
             })
             wx.ready(function () {
-              wx.updateAppMessageShareData({
+              this.$wx.updateAppMessageShareData({
                 title: '再见，再见', // 分享标题
                 desc: 'aaaaaa', // 分享描述
                 link: 'https://shop.dayu1.net/api/normal_user_info/', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
@@ -71,8 +71,7 @@
                   // 设置成功
                 }
               })
-
-              wx.updateTimelineShareData({
+              this.$wx.updateTimelineShareData({
                 title: '再见aaa，再见', // 分享标题
                 link: 'https://shop.dayu1.net/api/normal_user_info/', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
                 imgUrl: 'https://www.dayu1.net/static/img/biglogo.ee0dc6b.png', // 分享图标
@@ -83,7 +82,7 @@
             })
           }
           else
-            this.$toast.error("获取微信配置超时")
+            this.$toast.fail("获取微信配置超时")
         })
       }
     }
