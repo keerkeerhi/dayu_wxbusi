@@ -51,6 +51,7 @@
           return {
             showPicker: false,
             columns: ['百货', '美食', '服饰', '汽车'],
+            industryObj: {'百货':1,'美食':2,'服饰':3,'汽车':4},
             data: {
               ShopName: '',
               ShopLocation: '',
@@ -138,6 +139,7 @@
               res.forEach(it=>{
                 params[it.key] = it.path
               })
+              params.industry = _this.industryObj[params.industry];
               resolve(params)
             },rej=>{
               reject(1)
