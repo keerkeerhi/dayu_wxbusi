@@ -185,7 +185,7 @@
             return new Promise((ress,rejj)=>{
               if (!file.file)
               {
-                ress({key,path:'/'+file.url})
+                ress({key,path:file.url})
                 return;
               }
               let fm = new FormData();
@@ -193,7 +193,7 @@
               marketService.uploads(fm).then(res=>{
                 if (res.code==0)
                 {
-                  ress({key,path:res.data.path})
+                  ress({key,path:'/' + res.data.path})
                 }
                 else
                 {
