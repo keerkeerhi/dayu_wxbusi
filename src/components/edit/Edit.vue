@@ -1,7 +1,7 @@
 <template>
     <section class="editPage" >
       <van-cell-group class="item-div" >
-        <van-field v-model="product.name" required placeholder="请输入店铺名称" />
+        <van-field v-model="product.name" required placeholder="请输入商品名称" />
       </van-cell-group>
       <van-cell-group class="item-div" >
         <van-field

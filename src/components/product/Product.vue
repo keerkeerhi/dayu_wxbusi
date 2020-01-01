@@ -1,5 +1,5 @@
 <template>
-    <section>
+    <section class="productPage" >
       <section>
         <van-collapse v-model="activeId" accordion >
           <van-collapse-item v-for="it in pList" :name="it.id">
@@ -36,6 +36,11 @@
         <van-tabbar-item replace to="/order" icon="balance-list-o">我的订单</van-tabbar-item>
         <van-tabbar-item replace to="/product" icon="setting-o">我的商品</van-tabbar-item>
       </van-tabbar>
+
+      <router-link to="/edit" class="addPro global_shadow" >
+        <van-icon size="48" name="add-o" />
+      </router-link>
+
     </section>
 </template>
 
@@ -46,10 +51,7 @@
         data(){
           return {
             activeId: 0,
-            pList:[
-              {id:1,name:'农夫山泉',price:2,img:'',mark:'纯正农夫山泉，ABC很好好阿斯顿发的说法是对方ABC很好好阿斯顿发的说法是对方ABC很好好阿斯顿发的说法是对方ABC很好好阿斯顿发的说法是对方',status:1},
-              {id:2,name:'农夫山泉',price:2,img:'',mark:'纯正农夫山泉，ABC很好好阿斯顿发的说法是对方',status:1}
-            ]
+            pList:[]
           }
         },
         created()
@@ -58,7 +60,7 @@
           let shopId = this.$store.state.shopId
           console.log('==2==>>',this.shopId,shopId)
           marketService.my_product({shop_id:shopId}).then(res=>{
-              if (code==0)
+              if (res.code==0)
               {
                 console.log('---cus',res.data)
                 this.pList = res.data;
@@ -167,6 +169,20 @@
       text-align: center;
       font-size: 18px;
       border-radius: 8px;
+    }
+    .productPage{
+      position: relative;
+    }
+    .addPro{
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      margin: auto;
+      width: 85px;
+      height: 85px;
+      border-radius: 50%;
+      background: #fff;
     }
   }
 </style>
