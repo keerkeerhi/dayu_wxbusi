@@ -170,7 +170,7 @@
                   if (key.indexOf('img')>-1)
                   {
                     if (info[key])
-                      _this.imgs[key]= [{file:'',path:'https://' + _this.imgBase + '/' + info[key]}]
+                      _this.imgs[key]= [{name:key,url:'https://' + _this.imgBase + '/' + info[key]}]
                   }
                 }
                 console.log('====imgs',_this.imgs)
@@ -185,7 +185,7 @@
             return new Promise((ress,rejj)=>{
               if (!file.file)
               {
-                ress({key,path:file.path})
+                ress({key,path:file.url})
                 return;
               }
               let fm = new FormData();
@@ -230,6 +230,7 @@
               params.shop_id = _this.shopId
               if (_this.id>-1)
               {
+                params.com_id = _this.id
                 marketService.edit_product(params).then(res=>{
                   if (res.code==0)
                   {
