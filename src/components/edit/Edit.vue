@@ -170,7 +170,7 @@
                   if (key.indexOf('img')>-1)
                   {
                     if (info[key])
-                      _this.imgs[key]= [{name:key,url: '/' + info[key]}]
+                      _this.imgs[key]= [{name:key,url:info[key]}]
                   }
                 }
                 console.log('====imgs',_this.imgs)
@@ -185,7 +185,7 @@
             return new Promise((ress,rejj)=>{
               if (!file.file)
               {
-                ress({key,path:file.url})
+                ress({key,path:'/'+file.url})
                 return;
               }
               let fm = new FormData();
