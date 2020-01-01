@@ -161,8 +161,8 @@
             marketService.pro_detail({com_id:_this.id}).then(res=>{
               if (res.code==0)
               {
-                _this.product = res.data;
-                let info = res.data;
+                let info = res.data[0]
+                _this.product = info;
                 for (let key in info)
                 {
                   if (key.indexOf('img')>-1)
