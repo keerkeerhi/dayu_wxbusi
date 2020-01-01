@@ -228,6 +228,22 @@
             let _this = this;
             this.upload_all().then(params=>{
               params.shop_id = _this.shopId
+              if (_this.id>-1)
+              {
+                marketService.edit_product(params).then(res=>{
+                  if (res.code==0)
+                  {
+                    _this.$toast.success("编辑商品成功")
+                    // return;
+                    setTimeout(()=>{
+                      this.$router.replace('/product')
+                    },1200)
+                  }
+                  else
+                    _this.$toast.fail("操作超时")
+                });
+                return;
+              }
               marketService.add_product(params).then(res=>{
                 if (res.code==0)
                 {

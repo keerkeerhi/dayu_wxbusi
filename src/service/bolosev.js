@@ -35,8 +35,16 @@ const my_product = baseURL + 'pm/'
 const add_product = baseURL + 'add-commodity/'
 // 商品详情
 const pro_detail = baseURL + 'com-details/'
-
+// 编辑商品
+const edit_product = baseURL + 'edit-com/'
 export default {
+  edit_product(params){
+    return new Promise((resolve, reject) => {
+      axios.post(edit_product,params).then(res => {
+        resolve(res.data)
+      })
+    })
+  },
   pro_detail(params){
     return new Promise((resolve, reject) => {
       axios.post(pro_detail,params).then(res => {
