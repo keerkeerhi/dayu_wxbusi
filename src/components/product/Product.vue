@@ -4,7 +4,7 @@
         <van-collapse v-model="activeId" accordion >
           <van-collapse-item v-for="it in pList" :name="it.id">
             <section class="productItem"  slot="title">
-              <img src="{{imgBase + '/' + it.img1}}"  />
+              <img :src="imgBase + '/' + it.img1"  />
               <section class="itemCont" >
                 <div class="protit" >
                   <span>{{it.name}}</span>
