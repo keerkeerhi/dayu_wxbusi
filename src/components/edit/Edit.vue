@@ -1,10 +1,12 @@
 <template>
     <section class="editPage" >
       <van-cell-group class="item-div" >
-        <van-field v-model="product.name" required placeholder="请输入商品名称" />
+        <van-field v-model="product.name"
+                   clearable required placeholder="请输入商品名称" />
       </van-cell-group>
       <van-cell-group class="item-div" >
         <van-field
+          type = "number"
           v-model="product.price"
           required
           clearable
@@ -16,24 +18,24 @@
 
       <van-cell-group class="item-div phoneDiv1" >
         <span>商品封面</span>
-        <van-uploader v-model="fileList" :max-count="1" :after-read="afterRead" />
+        <van-uploader v-model="imgs.img1" :max-count="1" />
       </van-cell-group>
 
       <van-cell-group class="item-div phoneDiv1" >
         <span>详情图片</span>
         <section class="detail-imgs" >
-          <van-uploader v-model="fileList" :max-count="1" :after-read="afterRead" />
-          <van-uploader v-model="fileList" :max-count="1" :after-read="afterRead" />
-          <van-uploader v-model="fileList" :max-count="1" :after-read="afterRead" />
-          <van-uploader v-model="fileList" :max-count="1" :after-read="afterRead" />
-          <van-uploader v-model="fileList" :max-count="1" :after-read="afterRead" />
-          <van-uploader v-model="fileList" :max-count="1" :after-read="afterRead" />
+          <van-uploader v-model="imgs.img2" :max-count="1" />
+          <van-uploader v-model="imgs.img3" :max-count="1" />
+          <van-uploader v-model="imgs.img4" :max-count="1" />
+          <van-uploader v-model="imgs.img5" :max-count="1" />
+          <van-uploader v-model="imgs.img6" :max-count="1" />
+          <!--<van-uploader v-model="fileList" :max-count="1" />-->
         </section>
       </van-cell-group>
 
       <van-cell-group class="item-div" >
         <van-field
-          v-model="product.mark"
+          v-model="product.details"
           rows="2" autosize
           label="商品描述"
           type="textarea"
@@ -43,7 +45,8 @@
 
       <van-cell-group class="item-div" >
         <van-field
-          v-model="product.num"
+          v-model="product.total"
+          type="number"
           required
           clearable
           placeholder="请输入数量"
@@ -53,20 +56,20 @@
       </van-cell-group>
 
       <van-cell-group class="item-div" >
-        <van-switch-cell v-model="product.isSend" title="是否送货" />
+        <van-switch-cell v-model="product.IfDelivery" title="是否送货" />
       </van-cell-group>
 
       <van-cell-group class="item-div" >
-        <van-switch-cell v-model="product.isRush" title="是否抢购" />
+        <van-switch-cell v-model="product.PanicBuying" title="是否抢购" />
       </van-cell-group>
 
-      <template v-if="product.isRush" >
+      <template v-if="product.PanicBuying" >
         <van-cell-group>
           <van-field
             readonly
             clickable
             label="开始时间"
-            :value="product.startTime"
+            :value="product.StartTime"
             placeholder="开始时间"
             @click="showStart = true"
 
@@ -87,7 +90,7 @@
             readonly
             clickable
             label="结束时间"
-            :value="product.endTime"
+            :value="product.EndTime"
             placeholder="结束时间"
             @click="showEnd = true"
           />
@@ -111,7 +114,7 @@
 
 <script>
   import {dateFormat} from '../common/Util';
-
+  import marketService from '../../service/bolosev'
     export default {
         name: "Edit",
         data(){
@@ -119,27 +122,101 @@
             product:{
               name:'',
               price:'',
-              imgs:[],
-              mark:'',
-              num:'',
-              isSend: false,
-              isRush: true,
-              startTime: '',
-              endTime: ''
+              files:[],
+              details:'',
+              total:'',
+              // 是否送货
+              IfDelivery: false,
+              //  是否抢购
+              PanicBuying: false,
+              StartTime: '',
+              EndTime: '',
+              IfShelf: true,
+              // 尺寸
+              size: '',
+              label:''
             },
             startTime: new Date(),
             endTime: new Date(new Date().getTime()+1000*60*60*24),
-            fileList:[],
+            imgs:{img1:[],img2:[],img3:[],img4:[],img5:[],img6:[]},
             showStart:false,
             showEnd:false
           }
         },
         created(){
             document.title = "添加商品";
+          this.shopId = this.$store.state.shopId
+          console.log('==2==>>',this.shopId,shopId)
         },
         methods:{
+          update_one(key,file,id){
+            return new Promise((ress,rejj)=>{
+              let fm = new FormData();
+              fm.append("img",file.file,file.file.name)
+              if (id)
+                fm.append("id",id);
+              marketService.upload_img(key,fm).then(res=>{
+                if (res.code==0)
+                {
+                  ress({key,id:res.id})
+                }
+                else
+                {
+                  rejj(1)
+                }
+              })
+            })
+          },
+          upload_all(){
+            let _this = this;
+            return new Promise((resolve,reject)=>{
+              let ps = [];
+              _this.imgs.img1.forEach(it=>{
+                console.log('----->',it)
+                _this.update_one('img1',it).then(info=>{
+                  ps.push(info)
+                  for(let key in _this.imgs){
+                    if (key!='img1')
+                    {
+                      _this.imgs[key].forEach(img=>{
+                        ps.push(_this.update_one(key,img),info.id)
+                      })
+                    }
+                  }
+                },rej=>{
+                  _this.$toast.fail("上传图片超时")
+                })
+              })
+              Promise.all(ps).then(res=>{
+                let params = Object.assign({},_this.product)
+                if (res.length>0)
+                {
+                  params.files = res[0].id
+                }
+                resolve(params)
+              },rej=>{
+                reject(1)
+              })
+            })
+          },
           toSave(){
-
+            let _this = this;
+            this.upload_all().then(params=>{
+              params.id = _this.shopId
+              console.log('====>',params)
+              marketService.add_product(params).then(res=>{
+                if (res.code==0)
+                {
+                  _this.$toast.success("添加成功")
+                  // return;
+                  setTimeout(()=>{
+                    this.$router.replace('/product')
+                  },1200)
+                }
+                else
+                  _this.$toast.fail("操作超时")
+              });
+            })
           },
           formatter(type, value) {
             if (type === 'year') {
@@ -149,16 +226,12 @@
             }
             return value;
           },
-          afterRead(file){
-            // 此时可以自行将文件上传至服务器
-            console.log(file);
-          },
           onConfirm(value) {
-            this.product.startTime = dateFormat(value,"yyyy-MM-dd hh:mm:ss");
+            this.product.StartTime = dateFormat(value,"yyyy-MM-dd hh:mm:ss");
             this.showStart = false;
           },
           onConfirm2(value) {
-            this.product.endTime = dateFormat(value,"yyyy-MM-dd hh:mm:ss");
+            this.product.EndTime = dateFormat(value,"yyyy-MM-dd hh:mm:ss");
             this.showStart = false;
           }
         }

@@ -31,7 +31,17 @@ const my_shop = baseURL + 'my-shop/'
 const my_customer = baseURL + 'my-customers/'
 // 查询产品
 const my_product = baseURL + 'pm/'
+// 添加商品
+const add_product = baseURL + 'add-commodity/'
+
 export default {
+  add_product(params){
+    return new Promise((resolve, reject) => {
+      axios.post(add_product,params).then(res => {
+        resolve(res.data)
+      })
+    })
+  },
   my_product(params) {
     return new Promise((resolve, reject) => {
       axios.get(my_product + getParams(params)).then(res => {
@@ -56,6 +66,13 @@ export default {
   get_wxcfg(params) {
     return new Promise((resolve, reject) => {
       axios.get(get_wxcfg + getParams(params)).then(res => {
+        resolve(res.data)
+      })
+    })
+  },
+  upload_img(url,params){
+    return new Promise((resolve, reject) => {
+      axios.post(baseURL + url +'/',params).then(res => {
         resolve(res.data)
       })
     })
