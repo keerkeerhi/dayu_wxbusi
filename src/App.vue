@@ -13,6 +13,7 @@
       }
     },
     created() {
+      // return;
       this.initWx()
       marketService.shopStatus().then(res=>{
         if (res.code==0)

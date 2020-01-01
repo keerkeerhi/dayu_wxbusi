@@ -2,7 +2,7 @@
   <section class="homePage" >
     <header class="homeHead" >
       <div class="homeTitle" >
-        安阳大玉网络科技有限公司
+        {{shopInfo.ShopName}}
       </div>
       <div class="titlelit" >好评率 100% </div>
     </header>
@@ -19,13 +19,13 @@
 
     </section>
     <div class="positionDiv" >
-      <span>店铺位置：豪杰文化传媒4楼</span>
+      <span>店铺位置：{{shopInfo.ShopLocation}}</span>
       <span class="fixedPosition" >重新定位</span>
     </div>
     <van-tabbar route >
       <van-tabbar-item replace to="/home" icon="home-o" >我的店铺</van-tabbar-item>
       <van-tabbar-item replace to="/customer" icon="friends-o">我的顾客</van-tabbar-item>
-      <!--<van-tabbar-item name="search" icon="search">招聘</van-tabbar-item>-->
+      <van-tabbar-item replace to="/order" icon="balance-list-o">我的订单</van-tabbar-item>
       <van-tabbar-item replace to="/product" icon="setting-o">我的商品</van-tabbar-item>
     </van-tabbar>
   </section>
@@ -33,22 +33,24 @@
 
 <script>
 import marketService from '../../service/bolosev'
-import {isArray} from "../common/Util"
-
 export default {
   name: 'home',
   data () {
     return {
-      dataList: []
+      shopInfo: []
     }
   },
   created(){
     document.title = "我的店铺"
-    // 只支持hot
-    // marketService.query_market({t_type:'all'}).then(res => {
-    //   if (isArray(res.data))
-    //     this.dataList = res.data
-    // })
+    let _this = this;
+    marketService.my_shop().then(res=>{
+      if (res.code==0)
+      {
+        _this.shopInfo = res.data
+      }
+      else
+        this.$toast.fail("获取店铺信息超时")
+    })
   },
   methods: {
   }
