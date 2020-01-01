@@ -46,7 +46,10 @@ export default {
     marketService.my_shop().then(res=>{
       if (res.code==0)
       {
-        _this.shopInfo = res.data
+        if (res.data.length>0)
+          _this.shopInfo = res.data[0]
+        else
+          this.$toast.fail("系统没有找到您的店铺")
       }
       else
         this.$toast.fail("获取店铺信息超时")
