@@ -114,12 +114,14 @@
 
 <script>
   import {dateFormat} from '../common/Util';
+  import {Domain} from '../../components/common/globaldata'
   import marketService from '../../service/bolosev'
     export default {
         name: "Edit",
         props: ['id'],
         data(){
           return {
+            imgBase: Domain.host,
             product:{
               name:'',
               price:'',
@@ -167,7 +169,8 @@
                 {
                   if (key.indexOf('img')>-1)
                   {
-                    _this.imgs[key]= [{file:'',path:info[key]}]
+                    if (info[key])
+                      _this.imgs[key]= [{file:'',path:_this.imgBase + info[key]}]
                   }
                 }
                 console.log('====imgs',_this.imgs)
