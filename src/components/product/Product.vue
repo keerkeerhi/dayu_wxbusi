@@ -23,7 +23,7 @@
             <section class="btns" >
               <button v-if="it.status==1" class="normal-btn lower" >下架</button>
               <button v-else class="normal-btn upper" >上架</button>
-              <button class="normal-btn edit" @click="toEdit" >编辑</button>
+              <button class="normal-btn edit" @click="toEdit(it.id)" >编辑</button>
               <button class="normal-btn delete">删除</button>
               <button class="normal-btn preview">预览</button>
             </section>
@@ -70,8 +70,8 @@
         })
       },
       methods: {
-        toEdit(){
-          this.$router.push('/edit')
+        toEdit(id){
+          this.$router.push('/edit/'+id)
         }
       }
     }
@@ -172,17 +172,18 @@
     }
     .productPage{
       position: relative;
+      min-height: 100vh;
     }
-    .addPro{
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      margin: auto;
-      width: 96px;
-      height: 96px;
-      border-radius: 50%;
-      background: #fff;
-    }
+  }
+  .addPro{
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    width: 96px;
+    height: 96px;
+    border-radius: 50%;
+    background: #fff;
   }
 </style>
