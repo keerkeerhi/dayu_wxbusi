@@ -207,7 +207,13 @@
             return new Promise((resolve,reject)=>{
               let ps = [];
               for(let key in _this.imgs){
-                _this.imgs[key].forEach(img=>{
+                let fs = _this.imgs[key];
+                if (fs.length==0)
+                {
+                  ps.push({key,path:''})
+                  return;
+                }
+                fs.forEach(img=>{
                   console.log('=====img',img)
                   ps.push(_this.update_one(key,img))
                 })
