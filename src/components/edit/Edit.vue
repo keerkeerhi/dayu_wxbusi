@@ -170,6 +170,7 @@
                     _this.imgs[key]= [{file:'',path:info[key]}]
                   }
                 }
+                console.log('====imgs',_this.imgs)
               }
               else
                 _this.$toast.fail("获取商品信息超时")
@@ -204,6 +205,7 @@
               let ps = [];
               for(let key in _this.imgs){
                 _this.imgs[key].forEach(img=>{
+                  console.log('=====img',img)
                   ps.push(_this.update_one(key,img))
                 })
               }
