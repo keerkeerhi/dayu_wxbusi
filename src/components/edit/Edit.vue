@@ -56,11 +56,11 @@
       </van-cell-group>
 
       <van-cell-group class="item-div" >
-        <van-switch-cell v-model="product.IfDelivery" title="是否送货" />
+        <van-switch-cell active-value="0" inactive-value="1"  v-model="product.IfDelivery" title="是否送货" />
       </van-cell-group>
 
       <van-cell-group class="item-div" >
-        <van-switch-cell v-model="product.PanicBuying" title="是否抢购" />
+        <van-switch-cell active-value="0" inactive-value="1" v-model="product.PanicBuying" title="是否抢购" />
       </van-cell-group>
 
       <template v-if="product.PanicBuying" >
@@ -127,9 +127,9 @@
               details:'',
               total:'',
               // 是否送货
-              IfDelivery: false,
+              IfDelivery: 1,
               //  是否抢购
-              PanicBuying: false,
+              PanicBuying: 1,
               StartTime: '',
               EndTime: '',
               IfShelf: true,
