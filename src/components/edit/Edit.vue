@@ -117,6 +117,7 @@
   import marketService from '../../service/bolosev'
     export default {
         name: "Edit",
+        props: ['id'],
         data(){
           return {
             product:{
@@ -150,9 +151,13 @@
           }
         },
         created(){
-            document.title = "添加商品";
+          document.title = "添加商品";
           this.shopId = this.$store.state.shopId
-          console.log('==2==>>',this.shopId,shopId)
+          console.log('====productId',this.id)
+          if (this.id>0)
+          {
+            // 获取产品信息
+          }
         },
         methods:{
           update_one(key,file){
@@ -177,7 +182,7 @@
               let ps = [];
               for(let key in _this.imgs){
                 _this.imgs[key].forEach(img=>{
-                  ps.push(_this.update_one(key,img),info.id)
+                  ps.push(_this.update_one(key,img))
                 })
               }
               Promise.all(ps).then(res=>{

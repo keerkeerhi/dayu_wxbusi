@@ -37,7 +37,7 @@
         <van-tabbar-item replace to="/product" icon="setting-o">我的商品</van-tabbar-item>
       </van-tabbar>
 
-      <router-link to="/edit" class="addPro global_shadow" >
+      <router-link to="/edit/-1" class="addPro global_shadow" >
         <van-icon size="48" name="add-o" />
       </router-link>
 
