@@ -44,7 +44,6 @@
 
 <script>
   import { mapGetters } from 'vuex'
-
     export default {
         name: "Customer",
         data(){
@@ -58,8 +57,8 @@
         },
         created()
         {
-          // this.shopId = this.$store.data
-          console.log('==2==>>',this.shopId)
+          let shopId = this.$store.data
+          console.log('==2==>>',this.shopId,shopId)
           document.title = "我的顾客"
         },
       mounted(){
