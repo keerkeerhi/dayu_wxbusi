@@ -170,7 +170,7 @@
                   if (key.indexOf('img')>-1)
                   {
                     if (info[key])
-                      _this.imgs[key]= [{name:key,url:'https://' + _this.imgBase + '/' + info[key]}]
+                      _this.imgs[key]= [{name:key,url: '/' + info[key]}]
                   }
                 }
                 console.log('====imgs',_this.imgs)
