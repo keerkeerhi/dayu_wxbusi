@@ -47,7 +47,10 @@ export default {
       if (res.code==0)
       {
         if (res.data.length>0)
+        {
           _this.shopInfo = res.data[0]
+          this.$store.commit("setShop",_this.shopInfo.id)
+        }
         else
           this.$toast.fail("系统没有找到您的店铺")
       }

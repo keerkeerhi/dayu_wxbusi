@@ -43,20 +43,33 @@
 </template>
 
 <script>
+  import { mapGetters } from 'vuex'
+
     export default {
         name: "Customer",
-        created()
-        {
-          document.title = "我的顾客"
-        },
         data(){
           return {
             customerList:[
               {username:'郑晓峰',phone:'15537232100',total:1000000,times:1000},
               {username:'郑晓峰',phone:'15537232100',total:1000000,times:1000}
             ]
+            // shopId: ''
           }
-        }
+        },
+        created()
+        {
+          // this.shopId = this.$store.data
+          console.log('==2==>>',this.shopId)
+          document.title = "我的顾客"
+        },
+      mounted(){
+        console.log('==3==>>',this.shopId)
+      },
+      computed: {
+        ...mapGetters([
+          'shopId'
+        ])
+      }
     }
 </script>
 

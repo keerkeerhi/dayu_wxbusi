@@ -5,11 +5,11 @@ Vue.use(Vuex)
 
 const store = new Vuex.Store({
   state: {
-    wallet: 0
+    shopId: ''
   },
   mutations: {
-    setWallet(state, wallet) {
-      state.wallet = wallet
+    setShop(state, sId) {
+      state.shopId = sId
     }
   }
 })
