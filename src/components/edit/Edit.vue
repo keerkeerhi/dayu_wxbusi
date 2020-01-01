@@ -63,7 +63,7 @@
         <van-switch-cell active-value="0" inactive-value="1" v-model="product.PanicBuying" title="是否抢购" />
       </van-cell-group>
 
-      <template v-if="product.PanicBuying" >
+      <template v-if="product.PanicBuying==0" >
         <van-cell-group>
           <van-field
             readonly
@@ -154,14 +154,36 @@
           document.title = "添加商品";
           this.shopId = this.$store.state.shopId
           console.log('====productId',this.id)
+          let _this = this
           if (this.id>0)
           {
             // 获取产品信息
+            marketService.pro_detail({com_id:_this.id}).then(res=>{
+              if (res.code==0)
+              {
+                _this.product = res.data;
+                let info = res.data;
+                for (let key in info)
+                {
+                  if (key.indexOf('img')>-1)
+                  {
+                    _this.imgs[key]= [{file:'',path:info[key]}]
+                  }
+                }
+              }
+              else
+                _this.$toast.fail("获取商品信息超时")
+            })
           }
         },
         methods:{
           update_one(key,file){
             return new Promise((ress,rejj)=>{
+              if (!file.file)
+              {
+                ress({key,path:file.path})
+                return;
+              }
               let fm = new FormData();
               fm.append("filepath",file.file,file.file.name)
               marketService.uploads(fm).then(res=>{

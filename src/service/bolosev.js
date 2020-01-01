@@ -33,8 +33,17 @@ const my_customer = baseURL + 'my-customers/'
 const my_product = baseURL + 'pm/'
 // 添加商品
 const add_product = baseURL + 'add-commodity/'
+// 商品详情
+const pro_detail = baseURL + 'com-details/'
 
 export default {
+  pro_detail(params){
+    return new Promise((resolve, reject) => {
+      axios.post(pro_detail,params).then(res => {
+        resolve(res.data)
+      })
+    })
+  },
   add_product(params){
     return new Promise((resolve, reject) => {
       axios.post(add_product,params).then(res => {

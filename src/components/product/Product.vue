@@ -37,7 +37,7 @@
         <van-tabbar-item replace to="/product" icon="setting-o">我的商品</van-tabbar-item>
       </van-tabbar>
 
-      <router-link to="/edit/-1" class="addPro global_shadow" >
+      <router-link tag="div" to="/edit/-1" class="addPro global_shadow" >
         <van-icon size="48" name="add-o" />
       </router-link>
 
@@ -174,14 +174,13 @@
       position: relative;
     }
     .addPro{
-      display: block;
       position: absolute;
       bottom: 0;
       left: 0;
       right: 0;
       margin: auto;
-      width: 85px;
-      height: 85px;
+      width: 96px;
+      height: 96px;
       border-radius: 50%;
       background: #fff;
     }
