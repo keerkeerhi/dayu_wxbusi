@@ -27,8 +27,25 @@ const get_wxcfg = baseURL + 'get-wxcfg/'
 const uploads = baseURL + 'uploads/'
 // 查询店铺信息
 const my_shop = baseURL + 'my-shop/'
-
+// 查询顾客信息
+const my_customer = baseURL + 'my-customers/'
+// 查询产品
+const my_product = baseURL + 'pm/'
 export default {
+  my_product(params) {
+    return new Promise((resolve, reject) => {
+      axios.get(my_product + getParams(params)).then(res => {
+        resolve(res.data)
+      })
+    })
+  },
+  my_customer(params) {
+    return new Promise((resolve, reject) => {
+      axios.get(my_customer + getParams(params)).then(res => {
+        resolve(res.data)
+      })
+    })
+  },
   my_shop() {
     return new Promise((resolve, reject) => {
       axios.get(my_shop).then(res => {

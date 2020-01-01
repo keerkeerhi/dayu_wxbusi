@@ -9,7 +9,6 @@ const store = new Vuex.Store({
   },
   mutations: {
     setShop(state, sId) {
-      console.log('---sid',sId)
       state.shopId = sId
     }
   }

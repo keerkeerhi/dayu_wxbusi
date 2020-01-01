@@ -40,6 +40,7 @@
 </template>
 
 <script>
+  import marketService from '../../service/bolosev'
     export default {
         name: "Product",
         data(){
@@ -54,12 +55,23 @@
         created()
         {
           document.title = "商品管理"
-        },
-        methods:{
-          toEdit(){
-            this.$router.push('/edit')
-          }
+          let shopId = this.$store.state.shopId
+          console.log('==2==>>',this.shopId,shopId)
+          marketService.my_product({shop_id:shopId}).then(res=>{
+              if (code==0)
+              {
+                console.log('---cus',res.data)
+                this.pList = res.data;
+              }
+              else
+                this.$toast.fail("获取顾客信息超时")
+        })
+      },
+      methods: {
+        toEdit(){
+          this.$router.push('/edit')
         }
+      }
     }
 </script>
 

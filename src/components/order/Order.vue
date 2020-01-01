@@ -11,8 +11,31 @@
 </template>
 
 <script>
+  import marketService from '../../service/bolosev'
   export default {
-    name: 'Order'
+    name: 'Order',
+    data()
+    {
+      return {
+        orderList:[]
+      };
+    },
+    created()
+    {
+      document.title = "订单管理"
+      return;
+      let shopId = this.$store.state.shopId
+      console.log('==2==>>',this.shopId,shopId)
+      marketService.my_product({shop_id:shopId}).then(res=>{
+        if (res.code==0)
+        {
+          console.log('---cus',res.data)
+          this.orderList = res.data;
+        }
+        else
+          this.$toast.fail("获取顾客信息超时")
+      })
+    }
   }
 </script>
 

@@ -43,32 +43,29 @@
 </template>
 
 <script>
-  import { mapGetters } from 'vuex'
+  import marketService from '../../service/bolosev'
     export default {
         name: "Customer",
         data(){
           return {
-            customerList:[
-              {username:'郑晓峰',phone:'15537232100',total:1000000,times:1000},
-              {username:'郑晓峰',phone:'15537232100',total:1000000,times:1000}
-            ]
-            // shopId: ''
+            customerList:[]
           }
         },
         created()
         {
-          let shopId = this.$store.data
-          console.log('==2==>>',this.shopId,shopId)
           document.title = "我的顾客"
-        },
-      mounted(){
-        console.log('==3==>>',this.shopId)
-      },
-      computed: {
-        ...mapGetters([
-          'shopId'
-        ])
-      }
+          let shopId = this.$store.state.shopId
+          console.log('==2==>>',shopId)
+          marketService.my_customer({shop_id:shopId}).then(res=>{
+            if (code==0)
+            {
+              console.log('---cus',res.data)
+              this.customerList = res.data;
+            }
+            else
+              this.$toast.fail("获取顾客信息超时")
+          })
+        }
     }
 </script>
 
