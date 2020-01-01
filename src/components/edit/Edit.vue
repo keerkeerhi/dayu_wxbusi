@@ -167,7 +167,7 @@
               marketService.uploads(fm).then(res=>{
                 if (res.code==0)
                 {
-                  ress({key,path:res.id})
+                  ress({key,path:res.data.path})
                 }
                 else
                 {
@@ -187,6 +187,7 @@
               }
               Promise.all(ps).then(res=>{
                 let params = Object.assign({},_this.product)
+                console.log('======upladBack',res)
                 res.forEach(it=>{
                   params[it.key] = it.path
                 })
@@ -199,7 +200,7 @@
           toSave(){
             let _this = this;
             this.upload_all().then(params=>{
-              params.id = _this.shopId
+              params.shop_id = _this.shopId
               marketService.add_product(params).then(res=>{
                 if (res.code==0)
                 {
