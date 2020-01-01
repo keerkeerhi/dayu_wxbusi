@@ -211,7 +211,7 @@
                 if (fs.length==0)
                 {
                   ps.push({key,path:''})
-                  return;
+                  continue;
                 }
                 fs.forEach(img=>{
                   console.log('=====img',img)
