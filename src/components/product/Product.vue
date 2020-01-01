@@ -179,7 +179,7 @@
   }
   .addPro{
     position: absolute;
-    bottom: 0;
+    bottom: 85px;
     left: 0;
     right: 0;
     margin: auto;
