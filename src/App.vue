@@ -13,6 +13,7 @@
       }
     },
     created() {
+      return;
       this.initWx()
       marketService.shopStatus().then(res=>{
         if (res.code==0)
@@ -33,7 +34,6 @@
             // 则店铺正在审核中
             case 0:
               this.$router.push("/shopstatus")
-              this.$
               break;
             // 则店铺审核已通过
             case 1:
