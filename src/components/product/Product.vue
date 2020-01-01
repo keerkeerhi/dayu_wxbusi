@@ -174,6 +174,7 @@
       position: relative;
     }
     .addPro{
+      display: block;
       position: absolute;
       bottom: 0;
       left: 0;

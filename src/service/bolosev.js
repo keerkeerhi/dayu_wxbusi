@@ -70,13 +70,6 @@ export default {
       })
     })
   },
-  upload_img(url,params){
-    return new Promise((resolve, reject) => {
-      axios.post(baseURL + url +'/',params).then(res => {
-        resolve(res.data)
-      })
-    })
-  },
   uploads(params){
     return new Promise((resolve, reject) => {
       axios.post(uploads,params).then(res => {

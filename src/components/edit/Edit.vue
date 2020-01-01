@@ -122,7 +122,7 @@
             product:{
               name:'',
               price:'',
-              files:[],
+              files:'',
               details:'',
               total:'',
               // 是否送货
@@ -134,7 +134,13 @@
               IfShelf: true,
               // 尺寸
               size: '',
-              label:''
+              label:'',
+              img1:'',
+              img2:'',
+              img3:'',
+              img4:'',
+              img5:'',
+              img6:'',
             },
             startTime: new Date(),
             endTime: new Date(new Date().getTime()+1000*60*60*24),
@@ -149,16 +155,14 @@
           console.log('==2==>>',this.shopId,shopId)
         },
         methods:{
-          update_one(key,file,id){
+          update_one(key,file){
             return new Promise((ress,rejj)=>{
               let fm = new FormData();
-              fm.append("img",file.file,file.file.name)
-              if (id)
-                fm.append("id",id);
-              marketService.upload_img(key,fm).then(res=>{
+              fm.append("filepath",file.file,file.file.name)
+              marketService.uploads(fm).then(res=>{
                 if (res.code==0)
                 {
-                  ress({key,id:res.id})
+                  ress({key,path:res.id})
                 }
                 else
                 {
@@ -171,28 +175,16 @@
             let _this = this;
             return new Promise((resolve,reject)=>{
               let ps = [];
-              _this.imgs.img1.forEach(it=>{
-                console.log('----->',it)
-                _this.update_one('img1',it).then(info=>{
-                  ps.push(info)
-                  for(let key in _this.imgs){
-                    if (key!='img1')
-                    {
-                      _this.imgs[key].forEach(img=>{
-                        ps.push(_this.update_one(key,img),info.id)
-                      })
-                    }
-                  }
-                },rej=>{
-                  _this.$toast.fail("上传图片超时")
+              for(let key in _this.imgs){
+                _this.imgs[key].forEach(img=>{
+                  ps.push(_this.update_one(key,img),info.id)
                 })
-              })
+              }
               Promise.all(ps).then(res=>{
                 let params = Object.assign({},_this.product)
-                if (res.length>0)
-                {
-                  params.files = res[0].id
-                }
+                res.forEach(it=>{
+                  params[it.key] = it.path
+                })
                 resolve(params)
               },rej=>{
                 reject(1)
@@ -203,7 +195,6 @@
             let _this = this;
             this.upload_all().then(params=>{
               params.id = _this.shopId
-              console.log('====>',params)
               marketService.add_product(params).then(res=>{
                 if (res.code==0)
                 {
