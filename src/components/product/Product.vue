@@ -1,6 +1,6 @@
 <template>
     <section class="productPage" >
-      <section>
+      <section class="product-list" >
         <van-collapse v-model="activeId" accordion >
           <van-collapse-item v-for="(it,it_index) in pList" :name="it.id">
             <section class="productItem"  slot="title">
@@ -209,11 +209,16 @@
     .productPage{
       position: relative;
       min-height: 100vh;
+      display: flex;
+      flex-direction: column;
     }
+  }
+  .product-list{
+    margin-bottom: 105px;
   }
   .addPro{
     position: absolute;
-    bottom: 85px;
+    bottom: 105px;
     left: 0;
     right: 0;
     margin: auto;
