@@ -7,9 +7,7 @@ import ElementUI from 'element-ui'
 import './assets/css/element-variables.scss'
 
 import store from './store'
-import wx from 'weixin-js-sdk';
 // import "babel-polyfill"
-Vue.prototype.$wx = wx;
 Vue.config.productionTip = false
 Vue.use(ElementUI)
 
