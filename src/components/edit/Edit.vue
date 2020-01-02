@@ -134,7 +134,7 @@
               PanicBuying: 1,
               StartTime: '',
               EndTime: '',
-              IfShelf: true,
+              IfShelf: 0,
               // 尺寸
               size: '',
               label:'',

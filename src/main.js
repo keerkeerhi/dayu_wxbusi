@@ -16,7 +16,7 @@ import { Field,CellGroup,
   Picker,Uploader,
   Tabbar,TabbarItem,
   Collapse,CollapseItem,
-  SwitchCell,DatetimePicker,Icon } from 'vant';
+  SwitchCell,DatetimePicker,Icon,Dialog } from 'vant';
 Vue.use(Field);
 Vue.use(CellGroup);
 Vue.use(Toast);
@@ -30,6 +30,7 @@ Vue.use(CollapseItem);
 Vue.use(SwitchCell);
 Vue.use(DatetimePicker);
 Vue.use(Icon);
+Vue.use(Dialog);
 // import {
 //   Actionsheet,
 //   AddressEdit,

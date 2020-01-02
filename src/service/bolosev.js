@@ -37,7 +37,27 @@ const add_product = baseURL + 'add-commodity/'
 const pro_detail = baseURL + 'com-details/'
 // 编辑商品
 const edit_product = baseURL + 'edit-com/'
+// 上/下架商品
+const take_com = baseURL + 'takeoff-com/'
+// 删除商品
+const del_com = baseURL + 'delete-com/'
+
 export default {
+  del_com(params) {
+    return new Promise((resolve, reject) => {
+      axios.get(del_com + getParams(params)).then(res => {
+        resolve(res.data)
+      })
+    })
+  },
+  take_com(params)
+  {
+    return new Promise((resolve, reject) => {
+      axios.post(take_com,params).then(res => {
+        resolve(res.data)
+      })
+    })
+  },
   edit_product(params){
     return new Promise((resolve, reject) => {
       axios.post(edit_product,params).then(res => {

@@ -2,7 +2,7 @@
     <section class="productPage" >
       <section>
         <van-collapse v-model="activeId" accordion >
-          <van-collapse-item v-for="it in pList" :name="it.id">
+          <van-collapse-item v-for="(it,it_index) in pList" :name="it.id">
             <section class="productItem"  slot="title">
               <img :src="'https://' + imgBase + '/' + it.img1"  />
               <section class="itemCont" >
@@ -14,17 +14,17 @@
                   {{it.mark}}
                 </div>
                 <div class="statusDiv" >
-                  <div :style="{background:it.status==1?'#6c9000':'#a04000'}" class="statusWord" >
-                    {{it.status==1?'已上架':'已下架'}}
+                  <div :style="{background:it.IfShelf==0?'#6c9000':'#a04000'}" class="statusWord" >
+                    {{it.IfShelf==0?'已上架':'已下架'}}
                   </div>
                 </div>
               </section>
             </section>
             <section class="btns" >
-              <button v-if="it.status==1" class="normal-btn lower" >下架</button>
-              <button v-else class="normal-btn upper" >上架</button>
+              <button v-if="it.IfShelf==0" @click="take_pro(it_index,it.id,1)" class="normal-btn lower" >下架</button>
+              <button v-else class="normal-btn upper" @click="take_pro(it_index,it.id,0)" >上架</button>
               <button class="normal-btn edit" @click="toEdit(it.id)" >编辑</button>
-              <button class="normal-btn delete">删除</button>
+              <button class="normal-btn delete" @click="delPro(it_index,it.name,it.id)" >删除</button>
               <button class="normal-btn preview">预览</button>
             </section>
           </van-collapse-item>
@@ -72,6 +72,40 @@
         })
       },
       methods: {
+        delPro(index,com_name,com_id)
+        {
+          let _this = this
+          this.$dialog.confirm({
+            title: '确认',
+            message: `确认删除${com_name}?`
+          }).then(() => {
+            // on confirm
+            marketService.del_com({com_id}).then(res=>{
+              if (res.code==0)
+              {
+                _this.pList.splice(index,1);
+                _this.$toast.success("已删除")
+              }
+              else
+                _this.$toast.fail("操作超时")
+            })
+          }).catch(() => {
+            // on cancel
+          });
+        },
+        take_pro(index,com_id,IfShelf){
+          this.pList[index].IfShelf = IfShelf
+          marketService.take_com({com_id,IfShelf}).then(res=>{
+            if (res.code==0)
+            {
+              this.$toast.success("操作成功")
+            }
+            else
+            {
+              this.$toast.fail("操作超时");
+            }
+          })
+        },
         toEdit(id){
           this.$router.push('/edit/'+id)
         }
