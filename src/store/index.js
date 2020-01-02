@@ -5,11 +5,21 @@ Vue.use(Vuex)
 
 const store = new Vuex.Store({
   state: {
-    shopId: ''
+    shopId: '',
+    jsLoaded: false
   },
   mutations: {
     setShop(state, sId) {
       state.shopId = sId
+    },
+    setJs(state, status)
+    {
+      state.jsLoaded = status;
+    }
+  },
+  getters:{
+    getJs: state => {
+      return state.jsLoaded;
     }
   }
 })

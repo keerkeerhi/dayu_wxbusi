@@ -33,6 +33,8 @@
 
 <script>
 import marketService from '../../service/bolosev'
+import {mapGetters,mapState} from 'vuex'
+
 export default {
   name: 'home',
   data () {
@@ -58,7 +60,88 @@ export default {
         this.$toast.fail("获取店铺信息超时")
     })
   },
+  mounted(){
+    console.log('=======>>jsLoaded',this.jsLoaded)
+    if (this.jsLoaded)
+    {
+      this.initWx();
+    }
+  },
   methods: {
+    initWx(){
+      marketService.get_wxcfg({uri:location.href.split('#')[0]}).then(res=>{
+        if (res.code==0){
+          console.log('-=-====res.data',res.data)
+          let data = res.data
+          wx.config({
+            debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+            appId: data.AppId, // 必填，公众号的唯一标识
+            timestamp: data.timestamp, // 必填，生成签名的时间戳
+            nonceStr: data.nonceStr, // 必填，生成签名的随机串
+            signature: data.signature,// 必填，签名
+            jsApiList: ["onMenuShareAppMessage","getLocation","onMenuShareTimeline","openLocation"] // 必填，需要使用的JS接口列表
+          })
+          wx.error(function(res){
+            console.log('=====wxerror',res)
+          });
+          wx.ready(()=>{
+            wx.checkJsApi({
+              jsApiList: ["onMenuShareAppMessage","getLocation","onMenuShareTimeline","openLocation"], // 需要检测的JS接口列表，所有JS接口列表见附录2,
+              success: function(res) {
+                // 以键值对的形式返回，可用的api值true，不可用为false
+                // 如：{"checkResult":{"chooseImage":true},"errMsg":"checkJsApi:ok"}
+                console.log('----check',res)
+              }
+            });
+
+            wx.onMenuShareAppMessage({
+              title: '再见，再见', // 分享标题
+              desc: 'aaaaaa', // 分享描述
+              link: "https://shop.dayu1.net/api/normal_user_info/", // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+              imgUrl: "https://www.dayu1.net/static/img/biglogo.ee0dc6b.png", // 分享图标
+              success: function () {
+                // 设置成功
+                alert("-----设置分享给朋友成功")
+              },
+              error(e) {
+                alert(JSON.stringify(e))
+              }
+            })
+
+            wx.onMenuShareTimeline({
+              title: '再见aaa，再见', // 分享标题增值税改革亮点
+              link: "https://shop.dayu1.net/api/normal_user_info/", // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+              imgUrl: "https://www.dayu1.net/static/img/biglogo.ee0dc6b.png", // 分享图标
+              success: function () {
+                // 设置成功
+//                alert("-----设置分享到朋友圈成功")
+                _this.$toast("分享给朋友圈设置成功")
+                console.log('555555555555555555555555555')
+              },
+              error(e) {
+                alert(JSON.stringify(e))
+              }
+            })
+          })
+
+        }
+        else
+          this.$toast.fail("获取微信配置超时")
+      })
+    }
+  },
+  computed:{
+    ...mapState([
+      'jsLoaded',
+    ]),
+    ...mapGetters([
+      'getJs'
+    ])
+  },
+  watch: {
+    getJs(hasJs) { //li就是改变后的wifiList值
+      console.log('======hasJs',hasJs)
+    }
   }
 }
 </script>
