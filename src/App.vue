@@ -19,6 +19,7 @@
       marketService.shopStatus().then(res=>{
         if (res.code==0)
         {
+          res.data = 2;
           switch(res.data){
             // 则店铺未提交审核
             case -1:

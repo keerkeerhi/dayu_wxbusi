@@ -40,6 +40,16 @@
       <div class="bottom-btn" >
         <button class="normal-btn" @click="saveInfo" >提交审核</button>
       </div>
+      <van-popup
+        show="{{ showMap }}"
+        position="right"
+        custom-style="height: %;"
+        bind:close="onClose"
+      >
+        <section id="map-cont" >
+
+        </section>
+      </van-popup>
     </section>
 </template>
 
@@ -49,6 +59,7 @@
         name: "Register",
       data(){
           return {
+            showMap: false,
             showPicker: false,
             columns: ['百货', '美食', '服饰', '汽车'],
             industryObj: {'百货':1,'美食':2,'服饰':3,'汽车':4},
@@ -69,6 +80,11 @@
       },
       created(){
         document.title = "入驻申请"
+        let _this = this;
+        dynamicLoadJs("https://map.qq.com/api/gljs?v=1.exp&key=VT3BZ-WPZ33-3XL3L-YVO6U-NNFY3-KLB4S",()=>{
+          _this.mapJs = true;
+        })
+
       },
       methods: {
         read_file(file){
@@ -88,18 +104,30 @@
             success: function (res) {
               var latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
               var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
-              _this.data.ShopLocation = latitude + ',' + longitude;
               _this.data.ShopCoordinates = latitude + ',' + longitude;
-              // this.$wx.openLocation({
-              //   latitude: latitude, // 纬度，浮点数，范围为90 ~ -90
-              //   longitude: longitude, // 经度，浮点数，范围为180 ~ -180。
-              //   name: '', // 位置名
-              //   address: '', // 地址详情说明
-              //   scale: 1, // 地图缩放级别,整形值,范围从1~28。默认为最大
-              //   infoUrl: '' // 在查看位置界面底部显示的超链接,可点击跳转
-              // });
+              _this.showMM(latitude,longitude);
             }
           });
+        },
+        showMM(latitude,longitude){
+          _this.showMap = true;
+          if (_this.mapJs)
+          {
+            this.$nextTick(()=>{
+              //地图初始化函数，本例取名为init，开发者可根据实际情况定义
+              function initMap() {
+                //定义地图中心点坐标
+                var center = new TMap.LatLng(latitude, longitude)
+                //定义map变量，调用 TMap.Map() 构造函数创建地图
+                var map = new TMap.Map(document.getElementById('map-cont'), {
+                  center: center,//设置地图中心点坐标
+                  zoom: 17.2,   //设置地图缩放级别
+                  pitch: 43.5,  //设置俯仰角
+                  rotation: 45    //设置地图旋转角度
+                });
+              }
+            })
+          }
         },
         onConfirm(value) {
           this.data.ShopIndustry = value;
@@ -205,5 +233,9 @@
     display: flex;
     flex-direction: row;
     justify-content: center;
+  }
+  #map-cont{
+    width: 100vw;
+    height: 100vh;
   }
 </style>
