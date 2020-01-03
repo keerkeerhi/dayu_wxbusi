@@ -77,12 +77,19 @@ export default {
           _this.data.ShopLocation = latitude + ',' + longitude;
           _this.data.ShopCoordinates = latitude + ',' + longitude;
           wx.openLocation({
+            type: 'wgs84',
             latitude: latitude, // 纬度，浮点数，范围为90 ~ -90
             longitude: longitude, // 经度，浮点数，范围为180 ~ -180。
             name: '', // 位置名
             address: '', // 地址详情说明
             scale: 1, // 地图缩放级别,整形值,范围从1~28。默认为最大
-            infoUrl: '' // 在查看位置界面底部显示的超链接,可点击跳转
+            infoUrl: '', // 在查看位置界面底部显示的超链接,可点击跳转
+            success(suc){
+              console.log('====succss',suc)
+            },
+            fail(msg){
+              console.log('-----fail',msg)
+            }
           });
         }
       });
