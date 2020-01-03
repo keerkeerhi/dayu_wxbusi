@@ -83,10 +83,10 @@ export default {
             scale: 14, // 地图缩放级别,整形值,范围从1~28。默认为最大
             infoUrl: '', // 在查看位置界面底部显示的超链接,可点击跳转
             success(suc){
-              console.log('====succss',suc)
+              alert(JSON.stringify(suc))
             },
             fail(msg){
-              console.log('-----fail',msg)
+              alert(JSON.stringify(msg))
             }
           });
         }
