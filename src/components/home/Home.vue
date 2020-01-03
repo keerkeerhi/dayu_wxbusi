@@ -20,7 +20,7 @@
     </section>
     <div class="positionDiv" >
       <span>店铺位置：{{shopInfo.ShopLocation}}</span>
-      <span class="fixedPosition" >重新定位</span>
+      <span class="fixedPosition" @click="getLocc" >重新定位</span>
     </div>
     <van-tabbar route >
       <van-tabbar-item replace to="/home" icon="home-o" >我的店铺</van-tabbar-item>
@@ -68,6 +68,25 @@ export default {
     }
   },
   methods: {
+    getLocc(e){
+      wx.getLocation({
+        type: 'wgs84', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
+        success: function (res) {
+          var latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
+          var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
+          _this.data.ShopLocation = latitude + ',' + longitude;
+          _this.data.ShopCoordinates = latitude + ',' + longitude;
+          wx.openLocation({
+            latitude: latitude, // 纬度，浮点数，范围为90 ~ -90
+            longitude: longitude, // 经度，浮点数，范围为180 ~ -180。
+            name: '', // 位置名
+            address: '', // 地址详情说明
+            scale: 1, // 地图缩放级别,整形值,范围从1~28。默认为最大
+            infoUrl: '' // 在查看位置界面底部显示的超链接,可点击跳转
+          });
+        }
+      });
+    },
     initWx(){
       marketService.get_wxcfg({uri:location.href.split('#')[0]}).then(res=>{
         if (res.code==0){
@@ -122,6 +141,7 @@ export default {
                 alert(JSON.stringify(e))
               }
             })
+
           })
 
         }
