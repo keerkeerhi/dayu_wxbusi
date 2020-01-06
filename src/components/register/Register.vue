@@ -45,16 +45,16 @@
         position="top"
         :style="{ height: '100%' }"
       >
-        <section id="map-cont" >
-        abc
-        </section>
+        <iframe id="mapPage" width="100%" height="100%" frameborder=0
+                src="https://apis.map.qq.com/tools/locpicker?search=1&type=1&key=J7GBZ-KOEWO-YY5W4-SKQVK-ZJRQK-MKFLQ&referer=goldfish">
+        </iframe>
       </van-popup>
     </section>
 </template>
 
 <script>
   import marketService from '../../service/bolosev'
-  import {dynamicLoadJs} from '../../components/common/Util'
+  import {EventBus} from '../common/EventBus'
     export default {
         name: "Register",
       data(){
@@ -81,8 +81,9 @@
       created(){
         document.title = "入驻申请"
         let _this = this;
-        dynamicLoadJs("https://map.qq.com/api/js?v=2.exp&key=J7GBZ-KOEWO-YY5W4-SKQVK-ZJRQK-MKFLQ",()=>{
-          _this.mapJs = true;
+        EventBus.$on("positionBack",info=>{
+          console.log('======infl',info)
+          _this.showMap = false;
         })
       },
       methods: {
@@ -98,43 +99,11 @@
         },
         getLoc(){
           let _this = this;
-          _this.showMM(39.984120,116.307484);
-          return;
-          wx.getLocation({
-            type: 'wgs84', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
-            success: function (res) {
-              var latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
-              var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
-              _this.data.ShopCoordinates = latitude + ',' + longitude;
-              _this.showMM(latitude,longitude);
-            }
-          });
+          _this.showMM();
+
         },
-        showMM(latitude,longitude){
+        showMM(){
           this.showMap = true;
-          console.log("====mapJs",this.mapJs)
-          if (this.mapJs)
-          {
-            this.$nextTick(()=>{
-              //地图初始化函数，本例取名为init，开发者可根据实际情况定义
-              function initMap() {
-                console.log('===========init')
-                //定义地图中心点坐标
-                // var center = new TMap.LatLng(latitude, longitude)
-                map = new qq.maps.Map(document.getElementById("container"));
-                map.panTo(new qq.maps.LatLng(latitude, longitude));
-                map.zoomTo(13);
-                // //定义map变量，调用 TMap.Map() 构造函数创建地图
-                // var map = new TMap.Map(document.getElementById('map-cont'), {
-                //   center: center,//设置地图中心点坐标
-                //   zoom: 17.2,   //设置地图缩放级别
-                //   pitch: 43.5,  //设置俯仰角
-                //   rotation: 45    //设置地图旋转角度
-                // });
-              }
-              initMap()
-          })
-          }
         },
         onConfirm(value) {
           this.data.ShopIndustry = value;
