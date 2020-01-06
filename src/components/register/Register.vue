@@ -81,7 +81,7 @@
       created(){
         document.title = "入驻申请"
         let _this = this;
-        dynamicLoadJs("https://map.qq.com/api/gljs?v=1.exp&key=J7GBZ-KOEWO-YY5W4-SKQVK-ZJRQK-MKFLQ",()=>{
+        dynamicLoadJs("https://map.qq.com/api/js?v=2.exp&key=J7GBZ-KOEWO-YY5W4-SKQVK-ZJRQK-MKFLQ",()=>{
           _this.mapJs = true;
         })
       },
@@ -120,14 +120,17 @@
               function initMap() {
                 console.log('===========init')
                 //定义地图中心点坐标
-                var center = new TMap.LatLng(latitude, longitude)
-                //定义map变量，调用 TMap.Map() 构造函数创建地图
-                var map = new TMap.Map(document.getElementById('map-cont'), {
-                  center: center,//设置地图中心点坐标
-                  zoom: 17.2,   //设置地图缩放级别
-                  pitch: 43.5,  //设置俯仰角
-                  rotation: 45    //设置地图旋转角度
-                });
+                // var center = new TMap.LatLng(latitude, longitude)
+                map = new qq.maps.Map(document.getElementById("container"));
+                map.panTo(new qq.maps.LatLng(latitude, longitude));
+                map.zoomTo(13);
+                // //定义map变量，调用 TMap.Map() 构造函数创建地图
+                // var map = new TMap.Map(document.getElementById('map-cont'), {
+                //   center: center,//设置地图中心点坐标
+                //   zoom: 17.2,   //设置地图缩放级别
+                //   pitch: 43.5,  //设置俯仰角
+                //   rotation: 45    //设置地图旋转角度
+                // });
               }
               initMap()
           })
