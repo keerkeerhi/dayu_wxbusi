@@ -46,7 +46,7 @@
         :style="{ height: '100%' }"
       >
         <iframe id="mapPage" width="100%" height="100%" frameborder=0
-                src="http://apis.map.qq.com/tools/locpicker?search=1&type=1&key=J7GBZ-KOEWO-YY5W4-SKQVK-ZJRQK-MKFLQ&referer=goldfish">
+                src="https://apis.map.qq.com/tools/locpicker?search=1&type=1&key=J7GBZ-KOEWO-YY5W4-SKQVK-ZJRQK-MKFLQ&referer=goldfish">
         </iframe>
       </van-popup>
     </section>
