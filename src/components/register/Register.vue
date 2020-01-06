@@ -81,9 +81,11 @@
       created(){
         document.title = "入驻申请"
         let _this = this;
-        EventBus.$on("positionBack",info=>{
-          console.log('======infl',info)
+        EventBus.$on("positionBack",({latlng,poiaddress,cityname,poiname})=>{
+          let {lat,lng} = latlng
           _this.showMap = false;
+          _this.data.ShopCoordinates = lat + ',' + lng;
+          _this.data.ShopLocation = cityname + poiaddress;
         })
       },
       methods: {
