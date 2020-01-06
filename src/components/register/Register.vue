@@ -85,7 +85,7 @@
           let {lat,lng} = latlng
           _this.showMap = false;
           _this.data.ShopCoordinates = lat + ',' + lng;
-          _this.data.ShopLocation = cityname + poiaddress;
+          _this.data.ShopLocation = poiaddress + poiname;
         })
       },
       methods: {
@@ -102,7 +102,6 @@
         getLoc(){
           let _this = this;
           _this.showMM();
-
         },
         showMM(){
           this.showMap = true;
