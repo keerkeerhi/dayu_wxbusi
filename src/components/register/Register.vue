@@ -41,13 +41,12 @@
         <button class="normal-btn" @click="saveInfo" >提交审核</button>
       </div>
       <van-popup
-        show="{{ showMap }}"
-        position="right"
-        custom-style="height: %;"
-        bind:close="onClose"
+        v-model="showMap"
+        position="top"
+        :style="{ height: '100%' }"
       >
         <section id="map-cont" >
-
+        abc
         </section>
       </van-popup>
     </section>
@@ -55,6 +54,7 @@
 
 <script>
   import marketService from '../../service/bolosev'
+  import {dynamicLoadJs} from '../../components/common/Util'
     export default {
         name: "Register",
       data(){
@@ -81,10 +81,9 @@
       created(){
         document.title = "入驻申请"
         let _this = this;
-        dynamicLoadJs("https://map.qq.com/api/gljs?v=1.exp&key=VT3BZ-WPZ33-3XL3L-YVO6U-NNFY3-KLB4S",()=>{
+        dynamicLoadJs("https://map.qq.com/api/gljs?v=1.exp&key=J7GBZ-KOEWO-YY5W4-SKQVK-ZJRQK-MKFLQ",()=>{
           _this.mapJs = true;
         })
-
       },
       methods: {
         read_file(file){
@@ -99,6 +98,8 @@
         },
         getLoc(){
           let _this = this;
+          _this.showMM(39.984120,116.307484);
+          return;
           wx.getLocation({
             type: 'wgs84', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
             success: function (res) {
@@ -110,12 +111,14 @@
           });
         },
         showMM(latitude,longitude){
-          _this.showMap = true;
-          if (_this.mapJs)
+          this.showMap = true;
+          console.log("====mapJs",this.mapJs)
+          if (this.mapJs)
           {
             this.$nextTick(()=>{
               //地图初始化函数，本例取名为init，开发者可根据实际情况定义
               function initMap() {
+                console.log('===========init')
                 //定义地图中心点坐标
                 var center = new TMap.LatLng(latitude, longitude)
                 //定义map变量，调用 TMap.Map() 构造函数创建地图
@@ -126,7 +129,8 @@
                   rotation: 45    //设置地图旋转角度
                 });
               }
-            })
+              initMap()
+          })
           }
         },
         onConfirm(value) {
@@ -237,5 +241,6 @@
   #map-cont{
     width: 100vw;
     height: 100vh;
+    background: #fff;
   }
 </style>
