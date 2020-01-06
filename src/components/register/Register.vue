@@ -66,7 +66,8 @@
             data: {
               ShopName: '',
               ShopLocation: '',
-              ShopCoordinates: '',
+              lon: '',
+              lat:'',
               ShopIndustry: '',
               BusinessLicense: '',
               Positive: '',
@@ -84,7 +85,8 @@
         EventBus.$on("positionBack",({latlng,poiaddress,cityname,poiname})=>{
           let {lat,lng} = latlng
           _this.showMap = false;
-          _this.data.ShopCoordinates = lat + ',' + lng;
+          _this.data.lat = lat;
+          _this.data.lon = lng;
           _this.data.ShopLocation = poiaddress + poiname;
         })
       },
