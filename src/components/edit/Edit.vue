@@ -155,6 +155,7 @@
         created(){
           document.title = "添加商品";
           this.shopId = this.$store.state.shopId
+          this.shopPos = this.$store.state.shopPos;
           console.log('====productId',this.id)
           let _this = this
           if (this.id>0)
@@ -234,6 +235,8 @@
             let _this = this;
             this.upload_all().then(params=>{
               params.shop_id = _this.shopId
+              params.lat = _this.shopPos.lat
+              params.lon = _this.shopPos.lon
               if (_this.id>-1)
               {
                 params.com_id = _this.id

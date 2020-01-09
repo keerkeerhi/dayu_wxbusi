@@ -50,8 +50,11 @@ export default {
       {
         if (res.data.length>0)
         {
-          _this.shopInfo = res.data[0]
-          this.$store.commit("setShop",_this.shopInfo.id)
+          let shopInfo = res.data[0]
+          _this.shopInfo = shopInfo
+          let {id,lat,lon} = shopInfo
+          this.$store.commit("setShop",id)
+          this.$store.commit("setPos",{lat,lon})
         }
         else
           this.$toast.fail("系统没有找到您的店铺")
@@ -69,7 +72,6 @@ export default {
   },
   methods: {
     getLocc(e){
-
       wx.getLocation({
         type: 'wgs84', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
         success: function (res) {
