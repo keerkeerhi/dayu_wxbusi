@@ -156,6 +156,7 @@
           document.title = "添加商品";
           this.shopId = this.$store.state.shopId
           this.shopPos = this.$store.state.shopPos;
+          this.ShopIndustry = this.$store.state.ShopIndustry;
           console.log('====productId',this.id)
           let _this = this
           if (this.id>0)
@@ -237,6 +238,7 @@
               params.shop_id = _this.shopId
               params.lat = _this.shopPos.lat
               params.lon = _this.shopPos.lon
+              params.ShopIndustry = _this.ShopIndustry
               if (_this.id>-1)
               {
                 params.com_id = _this.id
