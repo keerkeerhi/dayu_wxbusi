@@ -191,7 +191,7 @@
           })
         },
         changeInx(it){
-          let {id,label,number} = it
+          let {id,CommodityName:label,number} = it
           return marketService.edit_type({label_id:id,label,number})
         },
         editOper(inx){
