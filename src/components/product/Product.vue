@@ -225,7 +225,7 @@
           });
         },
         getPList(){
-          marketService.my_product({shop_id:shopId}).then(res=>{
+          marketService.my_product({shop_id:this.shopId}).then(res=>{
             if (res.code==0)
             {
               console.log('---cus',res.data)
@@ -282,7 +282,7 @@
             forbidClick: true,
             loadingType: 'spinner'
           });
-          marketService.create_type({shop_id:this.shopId,label:this.typeInfo.name,number:this.typeList.length}).then(res=>{
+          marketService.create_type({shop_id:this.shopId,label:this.typeInfo.label,number:this.typeList.length}).then(res=>{
             if (res.code==0)
             {
               _this.typeInfo = {name:''}
