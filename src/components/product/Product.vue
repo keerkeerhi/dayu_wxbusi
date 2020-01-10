@@ -192,7 +192,7 @@
         },
         changeInx(it){
           let {id,number} = it
-          return marketService.edit_type({label_id:id,label:undefined,number})
+          return marketService.edit_type({label_id:id,label:null,number})
         },
         editOper(inx){
           this.showEdit = true;
