@@ -125,7 +125,7 @@
           let shopId = this.$store.state.shopId
           this.shopId = shopId
           console.log('==2==>>',this.shopId,shopId)
-          return;
+          // return;
           this.getPList()
           this.getTList()
       },
