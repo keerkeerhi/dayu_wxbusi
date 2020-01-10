@@ -68,6 +68,8 @@
       <van-dialog
         v-model="showAdd"
         title="添加商品类别"
+        @confirm="saveType"
+        @cancel="cancelType"
         show-cancel-button
       >
         <van-cell-group class="item-div" >
@@ -109,6 +111,13 @@
         })
       },
       methods: {
+        cancelType(){
+          this.typeInfo = {name:''}
+          this.showAdd = false;
+        },
+        saveType(){
+
+        },
         addType(){
           this.showAdd = true;
         },

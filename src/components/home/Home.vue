@@ -141,14 +141,21 @@ export default {
           this.$toast.fail("获取店铺信息超时")
       })
     },
-    update_one(key,file){
+    update_one(){
+      let _this = this;
       return new Promise((ress,rejj)=>{
+        if (_this.fileList==0)
+        {
+          ress(0)
+          return;
+        }
+        let file = _this.fileList[0]
         let fm = new FormData();
         fm.append("filepath",file.file,file.file.name)
         marketService.uploads(fm).then(res=>{
           if (res.code==0)
           {
-            ress({key,path:'/' +res.data.path})
+            ress({path:'/' +res.data.path})
           }
           else
           {
@@ -159,9 +166,10 @@ export default {
     },
     saveShop(){
       let _this = this;
-      this.update_one('cover',it).then(par=>{
-        let cover = par.path;
-        let {id,ShopLocation,lon,lat,announcement} = _this.shopInfo;
+      this.update_one().then(par=>{
+        let {id,ShopLocation,lon,cover,lat,announcement} = _this.shopInfo;
+        if (par)
+          cover = par.path
         marketService.edit_shop({shop_id:id,ShopLocation,lon,lat,announcement}).then(res=>{
           if (res.code==0)
           {
