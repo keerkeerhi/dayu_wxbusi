@@ -81,19 +81,19 @@
         show-cancel-button
       >
         <van-cell-group class="item-div" >
-          <van-field v-model="typeInfo.label" placeholder="请输入商品类别" />
+          <van-field v-model="typeInfo.CommodityName" placeholder="请输入商品类别" />
         </van-cell-group>
       </van-dialog>
 
       <van-dialog
         v-model="showEdit"
-        title="添加商品类别"
+        title="编辑商品类别"
         @confirm="doEditType"
         @cancel="cancelEdType"
         show-cancel-button
       >
         <van-cell-group class="item-div" >
-          <van-field v-model="typeInfo.label" placeholder="请输入商品类别" />
+          <van-field v-model="typeInfo.CommodityName" placeholder="请输入商品类别" />
         </van-cell-group>
       </van-dialog>
     </section>
@@ -110,7 +110,7 @@
           return {
             showEdit: false,
             showAdd:false,
-            typeInfo: {label:''},
+            typeInfo: {CommodityName:''},
             navIndex: 0,
             imgBase: Domain.host,
             activeId: 0,
@@ -144,7 +144,7 @@
           item.number = inx-1
           item2.number = inx
           let _this = this;
-          Promise.all(this.changeInx(item),this.changeInx(item2)).then(res=>{
+          Promise.all([this.changeInx(item),this.changeInx(item2)]).then(res=>{
             _this.$toast.clear()
             let flag = true;
             res.forEach(it=>{
@@ -174,7 +174,7 @@
           item.number = inx+1
           item2.number = inx
           let _this = this;
-          Promise.all(this.changeInx(item),this.changeInx(item2)).then(res=>{
+          Promise.all([this.changeInx(item),this.changeInx(item2)]).then(res=>{
             _this.$toast.clear()
             let flag = true;
             res.forEach(it=>{
@@ -250,11 +250,11 @@
           })
         },
         cancelType(){
-          this.typeInfo = {name:''}
+          this.typeInfo = {CommodityName:''}
           this.showAdd = false;
         },
         cancelEdType(){
-          this.typeInfo = {name:''}
+          this.typeInfo = {CommodityName:''}
           this.showEdit = false;
         },
         doEditType(){
@@ -264,11 +264,11 @@
             forbidClick: true,
             loadingType: 'spinner'
           });
-          let {id,label,number} = this.typeInfo
+          let {id,CommodityName:label,number} = this.typeInfo
           marketService.edit_type({label_id:id,label,number}).then(res=>{
             if (res.code==0)
             {
-              _this.typeInfo = {name:''}
+              _this.typeInfo = {CommodityName:''}
               _this.$toast.clear()
               _this.getTList()
               _this.showAdd = false;
@@ -284,10 +284,10 @@
             forbidClick: true,
             loadingType: 'spinner'
           });
-          marketService.create_type({shop_id:this.shopId,label:this.typeInfo.label,number:this.typeList.length}).then(res=>{
+          marketService.create_type({shop_id:this.shopId,label:this.typeInfo.CommodityName,number:this.typeList.length}).then(res=>{
             if (res.code==0)
             {
-              _this.typeInfo = {name:''}
+              _this.typeInfo = {CommodityName:''}
               _this.$toast.clear()
               _this.getTList()
               _this.showAdd = false;
