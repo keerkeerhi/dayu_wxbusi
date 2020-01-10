@@ -144,7 +144,7 @@ export default {
     update_one(){
       let _this = this;
       return new Promise((ress,rejj)=>{
-        if (_this.fileList==0)
+        if (_this.fileList==0||!_this.fileList[0].file)
         {
           ress(0)
           return;
@@ -170,7 +170,7 @@ export default {
         let {id,ShopLocation,lon,cover,lat,announcement} = _this.shopInfo;
         if (par)
           cover = par.path
-        marketService.edit_shop({shop_id:id,ShopLocation,lon,lat,announcement}).then(res=>{
+        marketService.edit_shop({shop_id:id,cover,ShopLocation,lon,lat,announcement}).then(res=>{
           if (res.code==0)
           {
             _this.fileList = [];
