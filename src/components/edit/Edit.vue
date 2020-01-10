@@ -16,6 +16,24 @@
         </van-field>
       </van-cell-group>
 
+      <van-cell-group class="item-div" >
+        <van-field
+          readonly
+          clickable
+          :value="product.label"
+          placeholder="选择类别"
+          @click="showPicker = true"
+        />
+        <van-popup v-model="showPicker" position="bottom">
+          <van-picker
+            show-toolbar
+            :columns="typeList"
+            @cancel="showPicker = false"
+            @confirm="onConfirm"
+          />
+        </van-popup>
+      </van-cell-group>
+
       <van-cell-group class="item-div phoneDiv1" >
         <span>商品封面</span>
         <van-uploader v-model="imgs.img1" :max-count="1" />
@@ -121,6 +139,7 @@
         props: ['id'],
         data(){
           return {
+            showPicker: false,
             imgBase: Domain.host,
             product:{
               name:'',
@@ -183,6 +202,10 @@
           }
         },
         methods:{
+          onConfirm(value) {
+            this.product.label = value;
+            this.showPicker = false;
+          },
           update_one(key,file){
             return new Promise((ress,rejj)=>{
               if (!file.file)
