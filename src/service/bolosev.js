@@ -21,6 +21,8 @@ axios.interceptors.response.use(function (response) {
 const shop_status = baseURL + 'shop-status/'
 // 入驻商铺
 const shop_msg = baseURL + 'shop-msg/'
+// 编辑商铺信息
+const edit_shop = baseURL + 'edit_shop/'
 // 获取微信api信息
 const get_wxcfg = baseURL + 'get-wxcfg/'
 // 上传图片
@@ -124,6 +126,13 @@ export default {
   shop_msg(params) {
     return new Promise((resolve, reject) => {
       axios.post(shop_msg, params).then(res => {
+        resolve(res.data)
+      })
+    })
+  },
+  edit_shop(params) {
+    return new Promise((resolve, reject) => {
+      axios.post(edit_shop, params).then(res => {
         resolve(res.data)
       })
     })

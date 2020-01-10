@@ -12,7 +12,9 @@
           种类管理
         </div>
       </header>
-      <section class="product-list" >
+
+      <!-- ----------------------- 商品管理 start  -->
+      <section v-if="navIndex==0" class="product-list" >
         <van-collapse v-model="activeId" accordion >
           <van-collapse-item v-for="(it,it_index) in pList" :name="it.id">
             <section class="productItem"  slot="title">
@@ -42,6 +44,13 @@
           </van-collapse-item>
         </van-collapse>
       </section>
+
+      <section v-else>
+
+      </section>
+      <!-- ----------------------- 商品管理 end  -->
+
+
       <van-tabbar route >
         <van-tabbar-item replace to="/home" icon="home-o" >我的店铺</van-tabbar-item>
         <van-tabbar-item replace to="/customer" icon="friends-o">我的顾客</van-tabbar-item>
@@ -55,6 +64,16 @@
       <div v-else @click="addType" class="addPro global_shadow" >
         <van-icon size="48" name="add-o" />
       </div>
+
+      <van-dialog
+        v-model="showAdd"
+        title="添加商品类别"
+        show-cancel-button
+      >
+        <van-cell-group class="item-div" >
+          <van-field v-model="typeInfo.name" placeholder="请输入商品类别" />
+        </van-cell-group>
+      </van-dialog>
     </section>
 </template>
 
@@ -65,6 +84,7 @@
         name: "Product",
         data(){
           return {
+            typeInfo: {name:''},
             navIndex: 0,
             imgBase: Domain.host,
             activeId: 0,
@@ -90,7 +110,7 @@
       },
       methods: {
         addType(){
-
+          this.showAdd = true;
         },
         toNav(inx)
         {

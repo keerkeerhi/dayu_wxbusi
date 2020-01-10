@@ -54,7 +54,7 @@
         </van-cell-group>
         <van-cell-group title="店铺公告" >
           <van-field
-            v-model="shopInfo.mark"
+            v-model="shopInfo.announcement"
             rows="2"
             autosize
             type="textarea"
@@ -92,7 +92,7 @@ export default {
       showEd: false,
       shopInfo: {
         ShopLocation: "信合路南段信合路南段信合路南段信合路南段信合路南段信合路南段信合路南段",
-        mark: ''
+        announcement: ''
       },
       fileList: [],
     }
@@ -160,8 +160,9 @@ export default {
     saveShop(){
       let _this = this;
       this.update_one('cover',it).then(par=>{
-        let params = Object.assign({[par.key]:par.path},_this.shopInfo)
-        marketService.shop_msg(params).then(res=>{
+        let cover = par.path;
+        let {id,ShopLocation,lon,lat,announcement} = _this.shopInfo;
+        marketService.edit_shop({shop_id:id,ShopLocation,lon,lat,announcement}).then(res=>{
           if (res.code==0)
           {
             _this.fileList = [];

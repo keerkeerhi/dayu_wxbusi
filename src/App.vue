@@ -23,7 +23,6 @@
         }
       }, false);
     },
-
     mounted() {
       // return;
       this.initWx()
