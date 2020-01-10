@@ -1,5 +1,17 @@
 <template>
     <section class="productPage" >
+      <header class="stuNav" >
+        <div :class='{stuNI:true,active:navIndex==0}' data-inx="0"
+             @click='toNav(0)'
+        >
+          商品管理
+        </div>
+        <div class='stuNL' ></div>
+        <div :class='{stuNI:true,active:navIndex==1}' data-inx="1"
+              @click='toNav(1)' >
+          种类管理
+        </div>
+      </header>
       <section class="product-list" >
         <van-collapse v-model="activeId" accordion >
           <van-collapse-item v-for="(it,it_index) in pList" :name="it.id">
@@ -37,10 +49,12 @@
         <van-tabbar-item replace to="/product" icon="setting-o">我的商品</van-tabbar-item>
       </van-tabbar>
 
-      <router-link tag="div" to="/edit/-1" class="addPro global_shadow" >
+      <router-link v-if="navIndex==0" tag="div" to="/edit/-1" class="addPro global_shadow" >
         <van-icon size="48" name="add-o" />
       </router-link>
-
+      <div v-else @click="addType" class="addPro global_shadow" >
+        <van-icon size="48" name="add-o" />
+      </div>
     </section>
 </template>
 
@@ -51,9 +65,11 @@
         name: "Product",
         data(){
           return {
+            navIndex: 0,
             imgBase: Domain.host,
             activeId: 0,
-            pList:[]
+            pList:[],
+            showAdd:false
           }
         },
         created()
@@ -61,6 +77,7 @@
           document.title = "商品管理"
           let shopId = this.$store.state.shopId
           console.log('==2==>>',this.shopId,shopId)
+          return;
           marketService.my_product({shop_id:shopId}).then(res=>{
               if (res.code==0)
               {
@@ -72,6 +89,13 @@
         })
       },
       methods: {
+        addType(){
+
+        },
+        toNav(inx)
+        {
+          this.navIndex = inx;
+        },
         delPro(index,com_name,com_id)
         {
           let _this = this
@@ -226,5 +250,32 @@
     height: 96px;
     border-radius: 50%;
     background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .stuNav{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 100px;
+    background: #150080;
+  }
+  .stuNL{
+    height: 60px;
+    background: #fff;
+    width: 2px;
+  }
+  .stuNI{
+    color: #fff;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 34px;
+  }
+  .stuNI.active{
+    font-size: 36px;
+    font-weight: bold;
   }
 </style>

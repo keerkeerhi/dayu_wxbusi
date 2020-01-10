@@ -10,6 +10,7 @@ const store = new Vuex.Store({
       lat: '',
       lon: ''
     },
+    ShopIndustry:'',
     jsLoaded: false
   },
   mutations: {
@@ -19,6 +20,10 @@ const store = new Vuex.Store({
     setPos(state,pos)
     {
       state.shopPos = pos;
+    },
+    setInd(state,ind)
+    {
+      state.ShopIndustry = ind;
     },
     setJs(state, status)
     {

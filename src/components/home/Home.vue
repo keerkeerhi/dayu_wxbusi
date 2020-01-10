@@ -1,10 +1,13 @@
 <template>
   <section class="homePage" >
     <header class="homeHead" >
-      <div class="homeTitle" >
-        {{shopInfo.ShopName}}
+      <div class="shop_tit" >
+        <div class="homeTitle" >
+          {{shopInfo.ShopName}}aaa
+        </div>
+        <div class="titlelit" >好评率 100% </div>
       </div>
-      <div class="titlelit" >好评率 100% </div>
+      <van-icon @click="showEdit" name="more-o" size="25" />
     </header>
     <div class="expireTime" >
       <span>Vip到期时间：2022年11月5日</span>
@@ -19,8 +22,11 @@
 
     </section>
     <div class="positionDiv" >
-      <span>店铺位置：{{shopInfo.ShopLocation}}</span>
-      <span class="fixedPosition" @click="getLocc" >重新定位</span>
+      <span>店铺位置：</span>
+      <span class="add_info" >
+        {{shopInfo.ShopLocation}}
+        <span class="fixedPosition" @click="getLoc" >重新定位</span>
+      </span>
     </div>
     <van-tabbar route >
       <van-tabbar-item replace to="/home" icon="home-o" >我的店铺</van-tabbar-item>
@@ -28,40 +34,82 @@
       <van-tabbar-item replace to="/order" icon="balance-list-o">我的订单</van-tabbar-item>
       <van-tabbar-item replace to="/product" icon="setting-o">我的商品</van-tabbar-item>
     </van-tabbar>
+
+    <van-popup
+      v-model="showEd" closeable
+      :style="{ width:'100%' }"
+    >
+      <section class="edit-shop" >
+        <header>
+          <label>美化商铺</label>
+        </header>
+        <van-cell-group title="重新获取位置" class="item-div" >
+          <van-field v-model="shopInfo.ShopLocation" @click-right-icon="getLoc" placeholder="请输入店铺位置" >
+            <i class="iconfont iconlocation" slot="right-icon" ></i>
+          </van-field>
+        </van-cell-group>
+        <van-cell-group title="店铺封面图" class="item-div phoneDiv1" >
+          <span></span>
+          <van-uploader v-model="fileList" :max-count="1" />
+        </van-cell-group>
+        <van-cell-group title="店铺公告" >
+          <van-field
+            v-model="shopInfo.mark"
+            rows="2"
+            autosize
+            type="textarea"
+            placeholder="请输入店铺公告"
+          />
+        </van-cell-group>
+        <section class="btn-div" >
+          <div class="cancel-btn" @click="cancel_oper" >取消</div>
+          <div class="save-btn" @click="saveShop" >保存</div>
+        </section>
+      </section>
+    </van-popup>
+
+    <van-popup
+      v-model="showMap"
+      position="top"
+      :style="{ height: '100%' }"
+    >
+      <iframe id="mapPage" width="100%" height="100%" frameborder=0
+              src="https://apis.map.qq.com/tools/locpicker?search=1&type=1&key=J7GBZ-KOEWO-YY5W4-SKQVK-ZJRQK-MKFLQ&referer=goldfish">
+      </iframe>
+    </van-popup>
   </section>
 </template>
 
 <script>
 import marketService from '../../service/bolosev'
 import {mapGetters,mapState} from 'vuex'
-
+import {EventBus} from '../../components/common/EventBus'
 export default {
   name: 'home',
   data () {
     return {
-      shopInfo: []
+      showMap: false,
+      showEd: false,
+      shopInfo: {
+        ShopLocation: "信合路南段信合路南段信合路南段信合路南段信合路南段信合路南段信合路南段",
+        mark: ''
+      },
+      fileList: [],
     }
   },
   created(){
-    document.title = "我的店铺"
     let _this = this;
-    marketService.my_shop().then(res=>{
-      if (res.code==0)
-      {
-        if (res.data.length>0)
-        {
-          let shopInfo = res.data[0]
-          _this.shopInfo = shopInfo
-          let {id,lat,lon} = shopInfo
-          this.$store.commit("setShop",id)
-          this.$store.commit("setPos",{lat,lon})
-        }
-        else
-          this.$toast.fail("系统没有找到您的店铺")
-      }
-      else
-        this.$toast.fail("获取店铺信息超时")
+    EventBus.$on("positionBack",({latlng,poiaddress,cityname,poiname})=>{
+      console.log("------mapBack")
+      let {lat,lng} = latlng
+      _this.showMap = false;
+      _this.shopInfo.lat = lat;
+      _this.shopInfo.lon = lng;
+      _this.shopInfo.ShopLocation = poiaddress + poiname;
     })
+    document.title = "我的店铺";
+    // return;
+    this.initShop();
   },
   mounted(){
     console.log('=======>>jsLoaded',this.jsLoaded)
@@ -71,28 +119,73 @@ export default {
     }
   },
   methods: {
-    getLocc(e){
-      wx.getLocation({
-        type: 'wgs84', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
-        success: function (res) {
-          var latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
-          var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
-          wx.openLocation({
-            latitude: latitude, // 纬度，浮点数，范围为90 ~ -90
-            longitude: longitude, // 经度，浮点数，范围为180 ~ -180。
-            name: '', // 位置名
-            address: '', // 地址详情说明
-            scale: 14, // 地图缩放级别,整形值,范围从1~28。默认为最大
-            infoUrl: '', // 在查看位置界面底部显示的超链接,可点击跳转
-            success(suc){
-              alert(JSON.stringify(suc))
-            },
-            fail(msg){
-              alert(JSON.stringify(msg))
-            }
-          });
+    initShop(){
+      let _this = this;
+      marketService.my_shop().then(res=>{
+        if (res.code==0)
+        {
+          if (res.data.length>0)
+          {
+            let shopInfo = res.data[0]
+            _this.shopInfo = shopInfo
+            let {id,lat,lon} = shopInfo
+            _this.fileList = [{name:'cover',url:shopInfo.cover}]
+            this.$store.commit("setShop",id)
+            this.$store.commit("setPos",{lat,lon})
+            this.$store.commit("setInd",shopInfo.ShopIndustry)
+          }
+          else
+            this.$toast.fail("系统没有找到您的店铺")
         }
-      });
+        else
+          this.$toast.fail("获取店铺信息超时")
+      })
+    },
+    update_one(key,file){
+      return new Promise((ress,rejj)=>{
+        let fm = new FormData();
+        fm.append("filepath",file.file,file.file.name)
+        marketService.uploads(fm).then(res=>{
+          if (res.code==0)
+          {
+            ress({key,path:'/' +res.data.path})
+          }
+          else
+          {
+            rejj(1)
+          }
+        })
+      })
+    },
+    saveShop(){
+      let _this = this;
+      this.update_one('cover',it).then(par=>{
+        let params = Object.assign({[par.key]:par.path},_this.shopInfo)
+        marketService.shop_msg(params).then(res=>{
+          if (res.code==0)
+          {
+            _this.fileList = [];
+            _this.showEd = false;
+            _this.initShop();
+          }
+          else
+          {
+            _this.$toast.fail('服务器宕机了，555~');
+          }
+        })
+      },rej=>{
+        _this.$toast.fail("上传图片超时")
+      })
+    },
+    cancel_oper(){
+      this.showEd = false;
+    },
+    showEdit(){
+      this.showEd = true;
+    },
+    getLoc(){
+      let _this = this;
+      this.showMap = true;
     },
     initWx(){
       marketService.get_wxcfg({uri:location.href.split('#')[0]}).then(res=>{
@@ -105,14 +198,14 @@ export default {
             timestamp: data.timestamp, // 必填，生成签名的时间戳
             nonceStr: data.nonceStr, // 必填，生成签名的随机串
             signature: data.signature,// 必填，签名
-            jsApiList: ["onMenuShareAppMessage","getLocation","onMenuShareTimeline","openLocation"] // 必填，需要使用的JS接口列表
+            jsApiList: ["onMenuShareAppMessage","onMenuShareTimeline"] // 必填，需要使用的JS接口列表
           })
           wx.error(function(res){
             console.log('=====wxerror',res)
           });
           wx.ready(()=>{
             wx.checkJsApi({
-              jsApiList: ["onMenuShareAppMessage","getLocation","onMenuShareTimeline","openLocation"], // 需要检测的JS接口列表，所有JS接口列表见附录2,
+              jsApiList: ["onMenuShareAppMessage","onMenuShareTimeline"], // 需要检测的JS接口列表，所有JS接口列表见附录2,
               success: function(res) {
                 // 以键值对的形式返回，可用的api值true，不可用为false
                 // 如：{"checkResult":{"chooseImage":true},"errMsg":"checkJsApi:ok"}
@@ -185,6 +278,16 @@ export default {
     flex-direction: row;
     margin-top: 50px;
     align-items: flex-end;
+    justify-content: space-between;
+  }
+  .homeHead>i{
+    margin-right: 25px;
+  }
+  .shop_tit{
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
   }
   .homeTitle{
     font-weight: bold;
@@ -243,10 +346,16 @@ export default {
     border-radius: 10px;
   }
   .positionDiv{
+    line-height: 42px;
     font-size: 32px;
     width: 700px;
     margin: 0 auto;
     margin-top: 50px;
+    display: flex;
+    flex-direction: row;
+  }
+  .positionDiv>.add_info{
+    flex: 1;
   }
   .fixedPosition{
     cursor: pointer;
@@ -254,5 +363,63 @@ export default {
     margin-left: 50px;
     border-bottom: 1px solid #a04000;
     padding-bottom: 3px;
+  }
+
+  .edit-shop{
+    display: flex;
+    flex-direction: column;
+  }
+  .edit-shop>header{
+    display: flex;
+    flex-direction: row;
+    height: 80px;
+    line-height: 80px;
+  }
+  .edit-shop>header>label{
+    margin-left: 25px;
+    font-weight: bold;
+    font-size: 32px;
+  }
+  .edit-shop>div{
+    margin-bottom: 20px;
+  }
+  .phoneDiv1{
+    min-height: 236px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+  .phoneDiv1>span:first-child{
+    font-size: 28px;
+    color: rgb(150,151,153);
+    margin-right: 20px;
+    margin-left: 26px;
+  }
+  .iconlocation{
+    color: #150080;
+    font-weight: bold;
+    font-size: 45px;
+  }
+  .btn-div{
+    display: flex;
+    flex-direction: row;
+    height: 80px;
+    line-height: 80px;
+  }
+  .btn-div>div{
+    flex: 1;
+  }
+  .cancel-btn{
+    background: #fff;
+    color: #333;
+    font-size: 32px;
+    text-align: center;
+  }
+  .save-btn{
+    background: #FF7D00;
+    color: #fff;
+    font-size: 36px;
+    font-weight: bold;
+    text-align: center;
   }
 </style>
