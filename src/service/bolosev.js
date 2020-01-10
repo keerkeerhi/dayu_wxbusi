@@ -22,7 +22,7 @@ const shop_status = baseURL + 'shop-status/'
 // 入驻商铺
 const shop_msg = baseURL + 'shop-msg/'
 // 编辑商铺信息
-const edit_shop = baseURL + 'edit_shop/'
+const edit_shop = baseURL + 'edit-shop/'
 // 获取微信api信息
 const get_wxcfg = baseURL + 'get-wxcfg/'
 // 上传图片
@@ -43,8 +43,23 @@ const edit_product = baseURL + 'edit-com/'
 const take_com = baseURL + 'takeoff-com/'
 // 删除商品
 const del_com = baseURL + 'delete-com/'
+// 标签列表
+const type_list = baseURL + 'label-mgt/'
+// 创建标签
+const create_type = baseURL + 'add-label/'
+// 编辑标签
+const edit_type = baseURL + 'edit-label/'
+// 删除标签
+const del_type = baseURL + 'delete-label/'
 
 export default {
+  type_list(params) {
+    return new Promise((resolve, reject) => {
+      axios.get(type_list + getParams(params)).then(res => {
+        resolve(res.data)
+      })
+    })
+  },
   del_com(params) {
     return new Promise((resolve, reject) => {
       axios.get(del_com + getParams(params)).then(res => {

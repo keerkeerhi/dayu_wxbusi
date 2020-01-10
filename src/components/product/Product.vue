@@ -91,13 +91,15 @@
             imgBase: Domain.host,
             activeId: 0,
             pList:[],
-            showAdd:false
+            showAdd:false,
+            typeList:[]
           }
         },
         created()
         {
           document.title = "商品管理"
           let shopId = this.$store.state.shopId
+          this.shopId = shopId
           console.log('==2==>>',this.shopId,shopId)
           return;
           marketService.my_product({shop_id:shopId}).then(res=>{
@@ -124,6 +126,20 @@
         toNav(inx)
         {
           this.navIndex = inx;
+          let _this = this;
+          if (inx)
+          {
+            marketService.type_list({shop_id:this.shopId}).then(res=>{
+              if (res.code==0)
+              {
+                _this.typeList = res.data;
+              }
+              else
+              {
+                _this.$toast.fail('获取类别列表超时');
+              }
+            })
+          }
         },
         delPro(index,com_name,com_id)
         {
