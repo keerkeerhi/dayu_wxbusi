@@ -413,6 +413,29 @@ function dynamicLoadJs(url, callback) {
   head.appendChild(script);
 }
 
+// 交换
+function swapArr(arr, index1, index2) {
+  arr[index1] = arr.splice(index2, 1, arr[index1])[0];
+  return arr;
+}
+
+// 上移一格
+function upGo(fieldData,index){
+  if(index!=0){
+    fieldData[index] = fieldData.splice(index-1, 1, fieldData[index])[0];
+  }else{
+    fieldData.push(fieldData.shift());
+  }
+}
+
+// 下移一格
+function downGo(fieldData,index) {
+  if(index!=fieldData.length-1){
+    fieldData[index] = fieldData.splice(index+1, 1, fieldData[index])[0];
+  }else{
+    fieldData.unshift( fieldData.splice(index,1)[0]);
+  }
+}
 // ------------------------   提示 end
 export {
   fGetRandom, resizeImg, dataURLtoBlob,
@@ -422,5 +445,5 @@ export {
   getNullString, getParams, getLengthNum, trim, sendMessage, combineToA,
   combineToB, initTreeVal, dateFormat, isNull, convertBase64UrlToBlob,
   stringToDate, getDateByMillisecond, comp, arrayIndex, arrayAdd, arrayRemove,
-  DatetoSecond,dynamicLoadJs
+  DatetoSecond,dynamicLoadJs,swapArr,upGo,downGo
 }

@@ -45,9 +45,17 @@
         </van-collapse>
       </section>
 
-      <section v-else>
-
-      </section>
+      <ul class="type-list" v-else>
+        <li v-for="(it,inx) in typeList" :key="inx" class="type-item" >
+          <label>{{it.label}}</label>
+          <div class="oper-items" >
+            <van-icon name="upgrade" size="30" @click="upOper(inx)" />
+            <van-icon name="down" size="30" @click="downOper(inx)" />
+            <van-icon name="edit" size="30" @click="editOper(inx)" />
+            <van-icon name="close" size="30" @click="delOper(inx,it.id,it.label)" />
+          </div>
+        </li>
+      </ul>
       <!-- ----------------------- 商品管理 end  -->
 
 
@@ -73,7 +81,19 @@
         show-cancel-button
       >
         <van-cell-group class="item-div" >
-          <van-field v-model="typeInfo.name" placeholder="请输入商品类别" />
+          <van-field v-model="typeInfo.label" placeholder="请输入商品类别" />
+        </van-cell-group>
+      </van-dialog>
+
+      <van-dialog
+        v-model="showEdit"
+        title="添加商品类别"
+        @confirm="doEditType"
+        @cancel="cancelEdType"
+        show-cancel-button
+      >
+        <van-cell-group class="item-div" >
+          <van-field v-model="typeInfo.label" placeholder="请输入商品类别" />
         </van-cell-group>
       </van-dialog>
     </section>
@@ -82,43 +102,197 @@
 <script>
   import marketService from '../../service/bolosev'
   import {Domain} from '../../components/common/globaldata'
-    export default {
+  import {upGo,downGo} from '../common/Util'
+
+  export default {
         name: "Product",
         data(){
           return {
-            typeInfo: {name:''},
+            showEdit: false,
+            showAdd:false,
+            typeInfo: {label:''},
             navIndex: 0,
             imgBase: Domain.host,
             activeId: 0,
             pList:[],
-            showAdd:false,
             typeList:[]
           }
         },
         created()
         {
+          let _this = this;
           document.title = "商品管理"
           let shopId = this.$store.state.shopId
           this.shopId = shopId
           console.log('==2==>>',this.shopId,shopId)
           return;
-          marketService.my_product({shop_id:shopId}).then(res=>{
-              if (res.code==0)
-              {
-                console.log('---cus',res.data)
-                this.pList = res.data;
-              }
-              else
-                this.$toast.fail("获取顾客信息超时")
-        })
+          this.getPList()
+          this.getTList()
       },
       methods: {
+        upOper(inx){
+          if (inx==0)
+            return;
+          this.$toast.loading({
+            message: '操作执行中...',
+            forbidClick: true,
+            loadingType: 'spinner'
+          });
+          let list = this.typeList;
+          let item = list[inx]
+          let item2 = list[inx-1]
+          item.number = inx-1
+          item2.number = inx
+          let _this = this;
+          Promise.all(this.changeInx(item),this.changeInx(item2)).then(res=>{
+            _this.$toast.clear()
+            let flag = true;
+            res.forEach(it=>{
+              if (it.code!=0)
+                flag = false;
+            })
+            if (flag)
+            {
+              upGo(_this.typeList,inx)
+              _this.$toast.success("操作成功")
+            }
+            else
+              _this.$toast.fail("操作失败")
+          })
+        },
+        downOper(inx){
+          if (inx==this.typeList.length-1)
+            return;
+          this.$toast.loading({
+            message: '操作执行中...',
+            forbidClick: true,
+            loadingType: 'spinner'
+          });
+          let list = this.typeList;
+          let item = list[inx]
+          let item2 = list[inx+1]
+          item.number = inx+1
+          item2.number = inx
+          let _this = this;
+          Promise.all(this.changeInx(item),this.changeInx(item2)).then(res=>{
+            _this.$toast.clear()
+            let flag = true;
+            res.forEach(it=>{
+              if (it.code!=0)
+                flag = false;
+            })
+            if (flag)
+            {
+              _this.$toast.success("操作成功")
+              downGo(this.typeList,inx)
+            }
+            else
+              _this.$toast.fail("操作失败")
+          })
+        },
+        changeInx(it){
+          let {id,label,number} = it
+          return marketService.edit_type({label_id:id,label,number})
+        },
+        editOper(inx){
+          this.showEdit = true;
+          this.typeInfo = this.typeList[inx]
+        },
+        delOper(inx,id,com_name){
+          let _this = this
+          this.$dialog.confirm({
+            title: '确认',
+            message: `确认删除种类"${com_name}"?`
+          }).then(() => {
+            // 自定义加载图标
+            _this.$toast.loading({
+              message: '加载中...',
+              forbidClick: true,
+              loadingType: 'spinner'
+            });
+            marketService.del_type({label_id:id}).then(res=>{
+              if (res.code==0)
+              {
+                _this.typeList.splice(inx,1);
+                _this.$toast.clear()
+                _this.$toast.success("已删除")
+              }
+              else
+                _this.$toast.fail("操作超时")
+            })
+          }).catch(() => {
+            // on cancel
+          });
+        },
+        getPList(){
+          marketService.my_product({shop_id:shopId}).then(res=>{
+            if (res.code==0)
+            {
+              console.log('---cus',res.data)
+              _this.pList = res.data;
+            }
+            else
+              _this.$toast.fail("获取顾客信息超时")
+          })
+        },
+        getTList(){
+          marketService.type_list({shop_id:this.shopId}).then(res=>{
+            if (res.code==0)
+            {
+              _this.typeList = res.data;
+            }
+            else
+            {
+              _this.$toast.fail('获取类别列表超时');
+            }
+          })
+        },
         cancelType(){
           this.typeInfo = {name:''}
           this.showAdd = false;
         },
+        cancelEdType(){
+          this.typeInfo = {name:''}
+          this.showEdit = false;
+        },
+        doEditType(){
+          let _this = this;
+          _this.$toast.loading({
+            message: '操作执行中...',
+            forbidClick: true,
+            loadingType: 'spinner'
+          });
+          let {id,label,number} = this.typeInfo
+          marketService.edit_type({label_id:id,label,number}).then(res=>{
+            if (res.code==0)
+            {
+              _this.typeInfo = {name:''}
+              _this.$toast.clear()
+              _this.getTList()
+              _this.showAdd = false;
+            }
+            else
+              _this.$toast.fail("添加类别超时")
+          })
+        },
         saveType(){
-
+          let _this = this;
+          _this.$toast.loading({
+            message: '操作执行中...',
+            forbidClick: true,
+            loadingType: 'spinner'
+          });
+          marketService.create_type({shop_id:this.shopId,label:this.typeInfo.name,number:this.typeList.length}).then(res=>{
+            if (res.code==0)
+            {
+              _this.typeInfo = {name:''}
+              _this.$toast.clear()
+              _this.getTList()
+              _this.showAdd = false;
+            }
+            else
+              _this.$toast.fail("添加类别超时")
+          })
         },
         addType(){
           this.showAdd = true;
@@ -126,20 +300,6 @@
         toNav(inx)
         {
           this.navIndex = inx;
-          let _this = this;
-          if (inx)
-          {
-            marketService.type_list({shop_id:this.shopId}).then(res=>{
-              if (res.code==0)
-              {
-                _this.typeList = res.data;
-              }
-              else
-              {
-                _this.$toast.fail('获取类别列表超时');
-              }
-            })
-          }
         },
         delPro(index,com_name,com_id)
         {
@@ -322,5 +482,31 @@
   .stuNI.active{
     font-size: 36px;
     font-weight: bold;
+  }
+  .type-list{
+    display: flex;
+    flex-direction: column;
+  }
+  .type-item{
+    height: 92px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #e4e4e4;
+  }
+  .type-item>label{
+    font-size: 28px;
+    color: #333;
+    margin-left: 35px;
+  }
+  .oper-items{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-right: 35px;
+  }
+  .oper-items>i{
+    margin-left: 50px;
   }
 </style>

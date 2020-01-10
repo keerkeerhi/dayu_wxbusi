@@ -53,6 +53,27 @@ const edit_type = baseURL + 'edit-label/'
 const del_type = baseURL + 'delete-label/'
 
 export default {
+  del_type(params) {
+    return new Promise((resolve, reject) => {
+      axios.get(del_type + getParams(params)).then(res => {
+        resolve(res.data)
+      })
+    })
+  },
+  edit_type(params) {
+    return new Promise((resolve, reject) => {
+      axios.get(edit_type + getParams(params)).then(res => {
+        resolve(res.data)
+      })
+    })
+  },
+  create_type(params) {
+    return new Promise((resolve, reject) => {
+      axios.get(create_type + getParams(params)).then(res => {
+        resolve(res.data)
+      })
+    })
+  },
   type_list(params) {
     return new Promise((resolve, reject) => {
       axios.get(type_list + getParams(params)).then(res => {
