@@ -225,6 +225,7 @@
           });
         },
         getPList(){
+          let _this = this
           marketService.my_product({shop_id:this.shopId}).then(res=>{
             if (res.code==0)
             {
@@ -236,6 +237,7 @@
           })
         },
         getTList(){
+          let _this = this
           marketService.type_list({shop_id:this.shopId}).then(res=>{
             if (res.code==0)
             {
