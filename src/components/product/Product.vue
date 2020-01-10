@@ -47,7 +47,7 @@
 
       <ul class="type-list" v-else>
         <li v-for="(it,inx) in typeList" :key="inx" class="type-item" >
-          <label>{{it.label}}</label>
+          <label>{{it.CommodityName}}</label>
           <div class="oper-items" >
             <van-icon name="upgrade" size="30" @click="upOper(inx)" />
             <van-icon name="down" size="30" @click="downOper(inx)" />
