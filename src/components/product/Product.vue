@@ -191,8 +191,8 @@
           })
         },
         changeInx(it){
-          let {id,CommodityName:label,number} = it
-          return marketService.edit_type({label_id:id,label,number})
+          let {id,number} = it
+          return marketService.edit_type({label_id:id,label:undefined,number})
         },
         editOper(inx){
           this.showEdit = true;
@@ -274,7 +274,7 @@
               _this.showAdd = false;
             }
             else
-              _this.$toast.fail("添加类别超时")
+              _this.$toast.fail(res.data)
           })
         },
         saveType(){
@@ -293,7 +293,7 @@
               _this.showAdd = false;
             }
             else
-              _this.$toast.fail("添加类别超时")
+              _this.$toast.fail(res.data)
           })
         },
         addType(){
