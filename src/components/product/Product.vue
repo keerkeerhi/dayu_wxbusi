@@ -52,7 +52,7 @@
             <van-icon name="upgrade" size="30" @click="upOper(inx)" />
             <van-icon name="down" size="30" @click="downOper(inx)" />
             <van-icon name="edit" size="30" @click="editOper(inx)" />
-            <van-icon name="close" size="30" @click="delOper(inx,it.id,it.label)" />
+            <van-icon name="close" size="30" @click="delOper(inx,it.id,it.CommodityName)" />
           </div>
         </li>
       </ul>
