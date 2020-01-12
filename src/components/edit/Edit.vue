@@ -220,7 +220,7 @@
         methods:{
           onConfirm_type(value,index) {
             this.product.label = this.typeList[index].id;
-            this.this_type = value;
+            this.this_type = value.CommodityName;
             this.showType = false;
           },
           update_one(key,file){
