@@ -20,16 +20,17 @@
         <van-field
           readonly
           clickable
-          :value="product.label"
+          :value="this_type"
           placeholder="选择类别"
-          @click="showPicker = true"
+          @click="showType = true"
         />
-        <van-popup v-model="showPicker" position="bottom">
+        <van-popup v-model="showType" position="bottom">
           <van-picker
             show-toolbar
             :columns="typeList"
+            value-key="CommodityName"
             @cancel="showPicker = false"
-            @confirm="onConfirm"
+            @confirm="onConfirm_type"
           />
         </van-popup>
       </van-cell-group>
@@ -140,8 +141,10 @@
         data(){
           return {
             showPicker: false,
+            showType: false,
             imgBase: Domain.host,
             typeList: [],
+            this_type: "",
             product:{
               name:'',
               price:'',
@@ -179,43 +182,46 @@
           this.ShopIndustry = this.$store.state.ShopIndustry;
           console.log('====productId',this.id)
           let _this = this
-          if (this.id>0)
-          {
-            // 获取产品信息
-            marketService.pro_detail({com_id:_this.id}).then(res=>{
+            marketService.type_list({shop_id:this.shopId}).then(res=>{
               if (res.code==0)
               {
-                let info = res.data[0]
-                _this.product = info;
-                for (let key in info)
-                {
-                  if (key.indexOf('img')>-1)
-                  {
-                    if (info[key])
-                      _this.imgs[key]= [{name:key,url:info[key]}]
-                  }
+                let tList = res.data
+                _this.typeList = tList
+                if (this.id>0) {
+                  // 获取产品信息
+                  marketService.pro_detail({com_id: _this.id}).then(res => {
+                    if (res.code == 0) {
+                      let info = res.data[0]
+                      _this.product = info;
+                      tList.forEach(it => {
+                        if (it.id == info.label) {
+                          _this.this_type = it.CommodityName
+                        }
+                      })
+                      for (let key in info) {
+                        if (key.indexOf('img') > -1) {
+                          if (info[key])
+                            _this.imgs[key] = [{name: key, url: info[key]}]
+                        }
+                      }
+                      console.log('====imgs', _this.imgs)
+                    }
+                    else
+                      _this.$toast.fail("获取商品信息超时")
+                  })
                 }
-                console.log('====imgs',_this.imgs)
               }
               else
-                _this.$toast.fail("获取商品信息超时")
+              {
+                _this.$toast.fail("获取类别信息超时")
+              }
             })
-          }
-          marketService.type_list({shop_id:this.shopId}).then(res=>{
-            if (res.code==0)
-            {
-              _this.typeList = res.data
-            }
-            else
-            {
-              _this.$toast.fail("获取类别信息超时")
-            }
-          })
         },
         methods:{
-          onConfirm(value) {
-            this.product.label = value;
-            this.showPicker = false;
+          onConfirm_type(value,index) {
+            this.product.label = this.typeList[index].id;
+            this.this_type = value;
+            this.showType = false;
           },
           update_one(key,file){
             return new Promise((ress,rejj)=>{
