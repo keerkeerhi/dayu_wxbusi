@@ -141,6 +141,7 @@
           return {
             showPicker: false,
             imgBase: Domain.host,
+            typeList: [],
             product:{
               name:'',
               price:'',
@@ -200,6 +201,16 @@
                 _this.$toast.fail("获取商品信息超时")
             })
           }
+          marketService.type_list({shop_id:this.shopId}).then(res=>{
+            if (res.code==0)
+            {
+              _this.typeList = res.data
+            }
+            else
+            {
+              _this.$toast.fail("获取类别信息超时")
+            }
+          })
         },
         methods:{
           onConfirm(value) {
